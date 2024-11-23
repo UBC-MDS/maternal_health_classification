@@ -27,3 +27,7 @@ The software code contained within this repository is licensed under the MIT lic
 # References
 
 Pima Indians Diabetes Database, https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names, 22 Nov 2024. 
+
+Dua, Dheeru, and Casey Graff. 2017. “UCI Machine Learning Repository.” University of California, Irvine, School of Information; Computer Sciences. http://archive.ics.uci.edu/ml.
+
+Ahmed, M., Kashem, M.A., Rahman, M., and S. Khatun. 2020. “Review and Analysis of Risk Factor of Maternal Health in Remote Area Using the Internet of Things(IoT)” Published in Lecture Notes in Electrical Engineering, vol 632. https://doi.org/10.24432/C5DP5D.
