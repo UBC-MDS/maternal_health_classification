@@ -19,8 +19,8 @@ dependencies:
   - requests=2.31.0
   - notebook=6.5.4
   - jupyter_contrib_nbextensions=0.7.0
-  - nb_conda_kernels
-  - jupyterlab
-  - matplotlib
+  - nb_conda_kernels=2.5.1
+  - jupyterlab=4.3.1
+  - matplotlib=3.9.2
   - pip:
     - altair_viewer==0.4.0
