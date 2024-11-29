@@ -59,5 +59,3 @@ jobs:
           git add docker-compose.yml
           git commit -m "Update docker-compose.yml with new image tag"
           git push
-        else:
-          echo "No changes to commit"
