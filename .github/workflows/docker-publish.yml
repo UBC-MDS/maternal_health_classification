@@ -48,6 +48,8 @@ jobs:
         if: success()
         run: |
           sed -i "s|image:  :.*|image:  123456789nelli/maternal_health_classification:${{ steps.meta.outputs.version }}|" docker-compose.yml
+          echo "Updated docker-compose.yml:"
+          cat docker-compose.yml
 
       - name: Commit and push updated docker-compose.yml
         if: success()
@@ -57,3 +59,6 @@ jobs:
           git add docker-compose.yml
           git commit -m "Update docker-compose.yml with new image tag"
           git push
+          else
+            echo "No changes to commit"
+          fi
