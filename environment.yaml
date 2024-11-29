@@ -23,6 +23,7 @@ dependencies:
   - jupyterlab=4.3.1
   - matplotlib=3.9.2
   - pandera=0.20.4
+  - pip
   - pip:
     - altair_viewer==0.4.0
     - deepchecks==0.18.1
