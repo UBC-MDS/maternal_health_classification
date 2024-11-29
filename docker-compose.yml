@@ -1,7 +1,7 @@
 services:
   # run jupyter notebook inside jupyter 
   jupyter-notebook:
-    image: 123456789nelli/maternal_health_classification:585b256
+    image: 123456789nelli/maternal_health_classification:2fc169d
     ports:
       - "8888:8888"
     volumes:
