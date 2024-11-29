@@ -47,7 +47,7 @@ jobs:
       - name: Update docker-compose.yml with new image tag
         if: success()
         run: |
-          sed -i "s|image:  :.*|image:  123456789nelli/maternal_health_classification:${{ steps.meta.outputs.version }}|" docker-compose.yml
+          sed -i "s|image: .*|image: 123456789nelli/maternal_health_classification:${{ steps.meta.outputs.version }}|" docker-compose.yml
           echo "Updated docker-compose.yml:"
           cat docker-compose.yml
 
