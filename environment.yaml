@@ -29,4 +29,3 @@ dependencies:
   - pip
   - pip:
     - altair_viewer==0.4.0
-    - deepchecks==0.18.1
