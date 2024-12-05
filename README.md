@@ -44,9 +44,20 @@ docker compose up --build
 2. In the terminal, look for a URL that starts with 
 `http://127.0.0.1:8888/lab?token=` 
 
-3. From the root of the project run the following scripts:
+3. From the root of the project run the following commands:
 
-```python scripts/download_data.py --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" --write_to=data/raw
+```
+# Step 1: Download the dataset
+python scripts/download_data.py \
+    --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" \
+    --write_to=data/raw
+
+# Step 2: Split and preprocess the data
+python scripts/split_and_preprocess.py \
+    --raw-data="data/raw/Maternal Health Risk Data Set.csv" \
+    --data-to="data/processed" \
+    --preprocessor-to="results/models" \
+    --seed=522
 ```
 
 ### Clean up
