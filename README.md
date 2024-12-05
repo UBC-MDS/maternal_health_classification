@@ -51,13 +51,6 @@ docker compose up --build
 python scripts/download_data.py \
     --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" \
     --write_to=data/raw
-
-# Step 2: Split and preprocess the data
-python scripts/split_and_preprocess.py \
-    --raw-data="data/raw/Maternal Health Risk Data Set.csv" \
-    --data-to="data/processed" \
-    --preprocessor-to="results/models" \
-    --seed=522
 ```
 
 ### Clean up
