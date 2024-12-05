@@ -44,9 +44,10 @@ docker compose up --build
 2. In the terminal, look for a URL that starts with 
 `http://127.0.0.1:8888/lab?token=` 
 
-3. To run the analysis,
-open `notebooks/maternal_health_classification.ipynb` in Jupyter Lab you just launched
-and under the "Kernel" menu click "Restart Kernel and Run All Cells...".
+3. From the root of the project run the following scripts:
+
+```python scripts/download_data.py --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" --write_to=data/raw
+```
 
 ### Clean up
 
