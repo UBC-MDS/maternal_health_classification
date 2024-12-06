@@ -46,7 +46,7 @@ def main(raw_data, data_dest, seed):
     check_feat_corr_result
     
     # Split data into train and test sets and save
-    train_df, test_df =train_test_split(df, test_size=0.2, random_state=seed)
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=seed)
 
     train_df.to_csv(os.path.join(data_dest, "train_df.csv"), index=False)
     test_df.to_csv(os.path.join(data_dest, "test_df.csv"), index=False)
