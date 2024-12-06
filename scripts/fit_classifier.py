@@ -1,3 +1,7 @@
+# fit_classifier.py
+# author: Joseph, Nelli, Shannon
+# date: 2024-12-05
+
 import pandas as pd
 import numpy as np
 import click
@@ -27,9 +31,6 @@ def main(training_data, preprocessor, pipeline_to, plot_to, seed):
     train_df = pd.read_csv(training_data)
     X_train = train_df.drop(columns=["RiskLevel"])
     y_train = train_df["RiskLevel"]
-
-    # Read in preprocessor
-    #preprocessor = pickle.load(open(preprocessor, "rb")) NEED TO EDIT THE PREPROCESSORRRR!!!!!!!!!!!!!!!!!!
     
     # Data Validation for Checking Correlation
     maternal_train_ds = Dataset(train_df, label="RiskLevel", cat_features=[])
@@ -95,6 +96,19 @@ def main(training_data, preprocessor, pipeline_to, plot_to, seed):
             clf_pipe, X_train, y_train, cv=10, return_train_score=True, error_score='raise'
         )
     results_df = pd.DataFrame(results_dict).T
+
+
+    dt = DecisionTreeClassifier(random_state=123)
+    
+    param_dist = {
+        'criterion': ['gini', 'entropy'], 
+        'max_depth': randint(3, 20),                
+    }
+    
+    random_search = RandomizedSearchCV(dt, param_dist, n_iter=100, n_jobs=-1, return_train_score = True, random_state=123)
+    random_search.fit(X_train, y_train)
+
+
 
 if __name__ == '__main__':
     main()
