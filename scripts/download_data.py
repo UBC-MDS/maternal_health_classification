@@ -2,7 +2,6 @@
 # author: Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
 # date: 2024-12-4
 # reference: ttimbers/breast-cancer-predictor
- 
 
 import click
 import os
