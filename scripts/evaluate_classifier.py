@@ -1,5 +1,5 @@
 # evaluate_classifier.py
-# author: Joseph, Nelli, Shannon
+# author: Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
 # date: 2024-12-05
 
 import click
