@@ -51,6 +51,27 @@ docker compose up --build
 python scripts/download_data.py \
     --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" \
     --write_to=data/raw
+
+# Step 2: Splitting the data and data validation
+python scripts/valid_split.py \
+    --raw-data=data/raw/"Maternal Health Risk Data Set.csv" \
+    --data-dest=data/processed
+
+# Step 3:
+
+
+# Step 4: Fitting the models on train set
+python scripts/fit_classifier.py \
+    --training-data=data/processed/train_df.csv \
+    --best_model_to=results/models \
+    --tbl_to=results/tables
+
+# Step 5: Evaluate the model on test set
+python scripts/evaluate_classifier.py \
+    --test_data=data/processed/test_df.csv \
+    --best_model_from=results/models/dt_tuned_fit.pickle \
+    --plot_to=results/figures \
+    --tbl_to=data/processed
 ```
 
 ### Clean up
