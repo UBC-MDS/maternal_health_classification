@@ -1,3 +1,7 @@
+# download_data.py
+# author: Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
+# date: 2024-12-4
+
 import click
 import pandas as pd
 import pandera as pa
