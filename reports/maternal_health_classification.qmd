@@ -17,6 +17,8 @@ execute:
 
 Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
 
+# Summary 
+
 # Introduction
 
 Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby.
@@ -32,12 +34,15 @@ import pandas as pd
 import numpy as np
 import pandera as pa
 import click
+import altair as alt
+from IPython.display import Markdown, display
+from tabulate import tabulate
 ```
 # Methods
 
 ## About Data 
 
-Data was taken from the @UCI \
+This dataset was sourced from the @UCI. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database @Pima_indians_data. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels high, medium, or low.
 Column descriptions: 
 
 - Age: Age in years when a woman is pregnant.
@@ -48,399 +53,71 @@ Column descriptions:
 - Risk Level: Predicted Risk Intensity Level during pregnancy considering the previous attribute.
 
 ## Analysis
-To answer our research question we explored several different machine learning models and compared the cross validation results to choose the best one. To accomplish this we used @Python for our analysis, more specifically we used the packages: @numpy, @altair, @pandas, @matplotlib, and @scikit-learn.
+To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used @Python for our analysis, more specifically we used the packages: @numpy, @altair, @pandas, @matplotlib, and @scikit-learn. We are going to drop two rows which contain data that is out of normal range. These two rows both include a heart rate of 7 (beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm @heart_rates. Moreover, heart rate during pregnancy typically increases on average, for various reason, though there is no clear upper limit defined to be normal @pregnancy_tachycardia.
+Our dataset has a number of rows that seems to be duplicated, however after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there is only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.
+
+# Results and Discussion
+
+Let’s begin with a general exploration of our data. Based on the summaries from @tbl-df_describe and @tbl-df_info, we observe that there are no missing values, and all features, except for the target variable, are numeric. 
 
 ```{python}
-import os
+#| label: tbl-df_describe
+#| tbl-cap: Description of the maternal risk dataset.
 
-def validate_csv(file_path):
-    """
-    Validates if the input file is a valid CSV file.
-    
-    Args:
-        file_path (str): Path to the file.
-    
-    Returns:
-        pd.DataFrame: Loaded DataFrame if the file is valid.
-        None: If the file is not valid.
-    """
-    # Check if the file extension is .csv
-    if not file_path.endswith(".csv"):
-        print(f"Error: The file '{file_path}' is not a CSV file.")
-        return None
-
-    try:
-        # Attempt to read the file with Pandas
-        data = pd.read_csv(file_path)
-        print(f"'{file_path}' is a valid CSV file.")
-        return data
-    except pd.errors.ParserError:
-        print(f"Error: The file '{file_path}' is not a valid CSV file.")
-    except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found.")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    return None
-
-file_path = "../data/Maternal Health Risk Data Set.csv"
-df = validate_csv(file_path)
-
-if df is not None:
-    print("Data loaded successfully.")
-    print(df.head())
-else:
-    print("Failed to load data.")
-```
-
-# Data Validation
-
-We are going to drop two rows which contain data that is out of normal range. These two rows both include a heart rate of 7 (beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm @heart_rates. Moreover, heart rate during pregnancy typically increases on average, for various reason, though there is no clear upper limit defined to be normal @pregnancy_tachycardia.
-
-```{python}
-df = df[df['HeartRate'] != 7]
+df_describe_table = pd.read_csv("../results/tables/df_describe.csv")
+Markdown(df_describe_table.to_markdown(index = False))
 ```
 
 ```{python}
-# validate data
-schema = pa.DataFrameSchema(
-    {
-        "RiskLevel": pa.Column(str, pa.Check.isin(["high risk", "mid risk", "low risk"])),
-        "Age": pa.Column(int, pa.Check.between(10, 70)),
-        "SystolicBP": pa.Column(int, pa.Check.between(65, 185)),
-        "DiastolicBP": pa.Column(int, pa.Check.between(40, 125)),
-        "BS": pa.Column(float, pa.Check.between(3, 20)),
-        "BodyTemp": pa.Column(float, pa.Check.between(94, 105)),
-        "HeartRate": pa.Column(int, pa.Check.between(50, 110))
-    },
-    checks=[
-        #pa.Check(lambda df: ~df.duplicated().any(), error="Duplicate rows present."),
-        pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error="Empty rows present.")
-    ]
-)
+#| label: tbl-df_info
+#| tbl-cap: Information of the maternal risk dataset.
+
+df_info_table = pd.read_csv("../results/tables/df_info.csv")
+Markdown(df_info_table.to_markdown(index = False))
 ```
+
+Although the dataset has a relatively small number of observations (@tbl-df_shape), it should still be sufficient for initial modeling efforts.
 
 ```{python}
-# Run validation tests on our dataframe
-schema.validate(df, lazy=True)
+#| label: tbl-df_shape
+#| tbl-cap: Shape of the maternal risk dataset.
+
+df_shape_table = pd.read_csv("../results/tables/df_shape.csv")
+Markdown(df_shape_table.to_markdown(index = False))
 ```
 
-```{python}
-# Check how many duplicated rows we have
-print(f"There are {df.duplicated().sum()} duplicated rows")
-```
+From the @fig-countplot_of_risk_level, we can observe that the data is relatively balanced, with the "high risk" category having the fewest observations and the "low risk" category having the most.
 
-We have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there is only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally we were able to check the csv file and see that the duplicate rows are far from eachother rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.
+![Countplot of the Risk Level variable](../results/figures/countplot_of_risk_level.png){#fig-countplot_of_risk_level width=80%}
 
-# Exploring the Data
+Let’s discuss some of the relationships observed in the heatmap of the dataset seen in @fig-heatmap_of_the_maternal_health:
 
-```{python}
-df.info()
-df.describe()
-```
+- The “Risk Level,” our target variable, shows a noticeable correlation with “Blood Pressure.” This suggests that individuals with higher or lower blood pressure levels may fall into distinct risk categories. As a result, “Blood Pressure” could be an important predictor in the later stages of our analysis.
+- The systolic (upper) and diastolic (lower) blood pressure values exhibit a strong correlation, which is expected since both are closely related physiological metrics. Although we might have considered dropping one of them, the correlation remains below 0.8, so we will retain both, as they may still provide valuable insights when combined with other features.
 
-Let's make our target variable RiskLevel numeric by assigning 0 to low risk, 1 to mid risk and 2 to high risk later for the EDA. 
+![Heatmap of the Maternal Health Dataset](../results/figures/heatmap_of_the_maternal_health.png){#fig-heatmap_of_the_maternal_health width=70%}
 
-```{python}
-df_eda = df.copy()
-df_eda['RiskLevel'].unique()
-```
-
-```{python}
-RiskLevel = {'low risk':0, 
-        'mid risk':1, 
-        'high risk':2}
-
-df_eda['RiskLevel'] = df_eda['RiskLevel'].map(RiskLevel).astype(float)
-df_eda
-```
-
-## EDA
-
-We can see that we don't have any missing values and also all features beside the target variable are numeric. 
-
-```{python}
-import altair as alt
-```
-
-```{python}
-df_eda.isnull().sum()
-```
-
-We don't have too many observations (1014), but can still be enough for initial modeling
-
-```{python}
-df_eda.shape
-```
-
-We have somewhat balanced data, with high risk having the fewest observations and low risk having the most.
-
-```{python}
-chart = alt.Chart(df).mark_bar(color = 'steelblue').encode(
-    x = alt.X('RiskLevel', title = 'Risk Level', axis = alt.Axis(labelAngle = 0)),
-    y = alt.Y('count()', title = 'Count'),
-    color = alt.Color('RiskLevel:N', title = 'Risk Level')
-).properties(
-    title = "Countplot of Risk Level",
-    width = 300,
-    height = 300
-)
-
-chart
-```
-
-Let's discuss some of the relations from the heatmap of the dataset:
-
-- The "Risk Level" our target variable exhibits a noticeable correlation with "Blood Pressure" This suggests that individuals with higher or lower blood pressure levels may tend to fall into distinct risk categories. As a result, "Blood Pressure" could serve as an essential predictor in later stages of analysis.
-- The upper (systolic) and lower (diastolic) blood pressure values show a strong correlation. This is expected because both measurements are closely related physiological metrics. While we might have considered dropping one of them, the correlation is not higher than 0.8, so we will retain both, as they may still provide valuable information when combined with other features.
-
-```{python}
-correlation_matrix = df_eda.corr().abs().round(2).reset_index().melt(
-    id_vars = 'index', 
-    var_name = 'Variable', 
-    value_name = 'Correlation'
-)
-
-heatmap = alt.Chart(correlation_matrix).mark_rect().encode(
-    x = alt.X('Variable:N', title = '', sort = None),
-    y = alt.Y('index:N', title = '', sort = None),
-    color = alt.Color('Correlation:Q', scale = alt.Scale(scheme = 'viridis'), title = 'Correlation')
-).properties(
-    width = 600,
-    height = 400
-)
-
-text = alt.Chart(correlation_matrix).mark_text(baseline = 'middle').encode(
-    x = alt.X('Variable:N', sort = None, axis = alt.Axis(labelAngle = -45)),
-    y = alt.Y('index:N', sort = None),
-    text = alt.Text('Correlation:Q', format = '.2f'),
-    color = alt.condition(
-        'datum.Correlation > 0.5', 
-        alt.value('white'), 
-        alt.value('black')
-    )
-).properties(
-    title = "Heatmap of the Maternal Health"
-)
-
-final_chart = heatmap + text
-
-final_chart
-```
-
-```{python}
-columns = [col for col in df.columns.tolist() if col != 'RiskLevel']
-
-boxplots = [
-    alt.Chart(df).mark_boxplot(extent = 'min-max').encode(
-        x = alt.X('RiskLevel:N', title = 'Risk Level', axis = alt.Axis(labelAngle = 0)),
-        y = alt.Y(f'{col}:Q', title = col),
-        color = 'RiskLevel:N'
-    ).properties(
-        title = f'Boxplot of {col} by RiskLevel',
-        width = 300,
-        height = 200
-    )
-    for col in columns
-]
-
-final_chart = alt.vconcat(*boxplots).resolve_scale(
-    color = 'independent',
-    y = 'independent'
-)
-
-final_chart
-```
-
-We can see from the boxplots that women in the high-risk group generally have higher values across all our features. For example, older women are more likely to be classified as high risk. Additionally, the high-risk group shows a wider range for upper blood pressure and blood glucose levels, with the median value being slightly higher than that of the other groups.
+We can see from the boxplots (@fig-boxplot_by_risk_level) that women in the high-risk group generally have higher values across all our features. For example, older women are more likely to be classified as high risk. Additionally, the high-risk group shows a wider range for upper blood pressure and blood glucose levels, with the median value being slightly higher than that of the other groups.
 Another observation here is that there are quite a lot of outliers for the low risk category.
 
-# Data Modeling
+![Boxplot of the Maternal Health Dataset](../results/figures/boxplot_by_risk_level.png){#fig-boxplot_by_risk_level height=60% width=70%}
+
+## Model Comparison
+
+In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In {tbl-???} you can see that the Gaussian Bayes scored the lowest, with a validation score of ___. Next was the Logistic Regression model with a validation score of ___, close behind was the RBF-SVM model with a validation score of ___. And finally, the best performing model was the Decision Tree Classifier with a validation score of ___. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of ___, and the split criterion 'gini'. 
 
 ```{python}
-import matplotlib.pyplot as plt
-
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_validate
-
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import make_pipeline
-from scipy.stats import loguniform, uniform, randint
-
-from sklearn.dummy import DummyClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import plot_tree
+#random_search.score(X_test, y_test)
 ```
-
-```{python}
-train_df, test_df =train_test_split(df, test_size=0.2, random_state=123)
-X_train = train_df.drop(columns=["RiskLevel"])
-X_test = test_df.drop(columns=["RiskLevel"])
-y_train = train_df["RiskLevel"]
-y_test = test_df["RiskLevel"]
-```
-
-```{python}
-# Data Validation for Checking Correlation
-from deepchecks.tabular import Dataset
-from deepchecks.tabular.checks.data_integrity import FeatureFeatureCorrelation
-
-maternal_train_ds = Dataset(train_df, label="RiskLevel", cat_features=[])
-
-check_feat_corr = FeatureFeatureCorrelation()
-check_feat_corr_result = check_feat_corr.run(maternal_train_ds)
-check_feat_corr_result
-```
-
-## The Baseline Model: Dummy Classifier
-
-```{python}
-dummy_clf = DummyClassifier()
-scores = cross_validate(dummy_clf, X_train, y_train, cv=10, return_train_score=True)
-pd.DataFrame(scores)['test_score'].mean()
-```
-
-The cross validation score of a baseline dummy classifier is 0.4.
-
-## Gaussian Bayes Modeling
-
-Let's first train Gaussian Naive Bayes model and evaluate its performance to the baseline model.
-
-```{python}
-gaus_nb_pipe = make_pipeline(StandardScaler(), GaussianNB())
-gaus_nb_pipe.fit(X_train, y_train)
-```
-
-```{python}
-cv_results = cross_validate(gaus_nb_pipe, X_train, y_train, return_train_score=True)
-results_df = pd.DataFrame(cv_results)
-results_df
-```
-
-The results of the Gaussian Naive Bayes model are better than the dummy model but not by a lot. Based on this we're going to focus on other models and choose one that performs better.
-
-## Model Comparison between Decision Tree, Logistic Regression and SVC
-Since Gaussian Naive Bayes model is slightly better than the baseline model, we are interested if there are other models that can perform better. The objective here is to compare the cross-valdation scores of Decision Tree, Logistic Regression and SVC. Before passing the data to a machine learning model, we will apply some `StandardScaler()` transformations on the numeric features.
-
-```{python}
-models = {
-    "Decision Tree": DecisionTreeClassifier(random_state=123),
-    "RBF SVM": SVC(random_state=123),
-    "Logistic Regression": LogisticRegression(max_iter=2000, random_state=123),
-}
-```
-
-```{python}
-# The function below is adopted from DSCI571 Supervides Learning I Lecture 4 notes
-def mean_std_cross_val_scores(model, X_train, y_train, **kwargs):
-    """
-    Returns mean and std of cross validation
-
-    Parameters
-    ----------
-    model :
-        scikit-learn model
-    X_train : numpy array or pandas DataFrame
-        X in the training data
-    y_train :
-        y in the training data
-
-    Returns
-    ----------
-        pandas Series with mean scores from cross_validation
-    """
-
-    scores = cross_validate(model, X_train, y_train, **kwargs)
-
-    mean_scores = pd.DataFrame(scores).mean()
-    std_scores = pd.DataFrame(scores).std()
-    out_col = []
-
-    for i in range(len(mean_scores)):
-        out_col.append((f"%0.3f (+/- %0.3f)" % (mean_scores.iloc[i], std_scores.iloc[i])))
-
-    return pd.Series(data=out_col, index=mean_scores.index)
-```
-
-```{python}
-results_df = None
-results_dict = {}
-
-for model_name, model in models.items():
-    clf_pipe = make_pipeline(StandardScaler(), model)
-    results_dict[model_name] = mean_std_cross_val_scores(
-        clf_pipe, X_train, y_train, cv=10, return_train_score=True, error_score='raise'
-    )
-
-results_df = pd.DataFrame(results_dict).T
-results_df
-```
-
-Turns out that Decision Tree has the best performance for cross validation of 10 folds. It the highest validation score of 0.826 among the 3 models.
-
-## Hyperparameter Optimization
-Let's perform hyperparameter optimization using `RandomizedSearchCV` to the Decision Tree model.
-
-```{python}
-dt = DecisionTreeClassifier(random_state=123)
-
-param_dist = {
-    'criterion': ['gini', 'entropy'], 
-    'max_depth': randint(3, 20),                
-}
-
-random_search = RandomizedSearchCV(dt, param_dist, n_iter=100, n_jobs=-1, return_train_score = True, random_state=123)
-random_search.fit(X_train, y_train)
-```
-
-```{python}
-random_search.best_params_
-```
-
-```{python}
-random_search.best_score_
-```
-
-The best hyperparameters for the Decision Tree are when the criterion used is entropy and max depth of tree is 18.
 
 ## Reporting Test Score
-Now that we have found the best hyperparameters for the Decision Tree, we will move on to score on the testing data to access how well the Decision Tree performs on unseen data.
+After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data.
+Based on the scoring of Decision Tree model on the test data, the model has an accuracy of ___ which is fairly high, but still leaves room for improvement.
 
-```{python}
-random_search.score(X_test, y_test)
-```
+In order to answer our primary research question we have identified the first few leaves of our Decision Tree model. Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.
 
-Based on the scoring of Decision Tree model on the test data, the model have an accuracy of 83.25% which is fairly high.
 
-## Results and Discussion
-This part aims to identify the key indicators of maternal health risk based on the Decision Tree's split and for that we can visualize the Decision Tree out for better interpretability. Since the best Decision Tree has a maximum depth of 18, we will just look up to tree depth equals 3 for interpretation simplicity. Analyzing all 18 levels of the tree is overwhelming and may not provide actionable insights so the top levels should provide us a rough understanding of the most impactful variables.
-
-```{python}
-plt.figure(figsize=(15, 5))
-plot_tree(
-    random_search.best_estimator_,
-    feature_names=X_train.columns,
-    class_names=y_train.unique(),
-    filled=True,
-    max_depth=3  # Adjust the depth for better readability
-)
-plt.show()
-```
-
-Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the left subtree, further splits involve Body Temperature (BodyTemp) and finer levels of SystolicBP, which highlight their importance in determining mid-risk classification. On the right subtree, DiastolicBP (Diastolic Blood Pressure) and Age are also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.
 
 # References
 
-Ahmed, M., Kashem, M.A., Rahman, M. and Khatun, S. 2020. "Review and Analysis of Risk Factor of Maternal Health in Remote Area Using the Internet of Things (IoT)". Lecture Notes in Electrical Engineering, vol 632
-
-Dua, Dheeru, and Casey Graff. 2017. “UCI Machine Learning Repository.” University of California, Irvine, School of Information; Computer Sciences. http://archive.ics.uci.edu/ml.
-
-Pima Indians Diabetes Database, https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names, 22 Nov 2024.
-
-Target Heart Rates Chart, https://www.heart.org/en/healthy-living/fitness/fitness-basics/target-heart-rates, 29 Nov 2024. 
-
-Kolhatkar, V. (2023). Lecture 4: Preprocessing, Sklearn Pipeline, Sklearn ColumnTrasnsformer. GitHub. https://pages.github.ubc.ca/mds-2024-25/DSCI_571_sup-learn-1_students/lectures/notes/04_preprocessing-pipelines-column-transformer.html#let-s-first-run-our-baseline-model-dummyregressor
-
-Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
 
