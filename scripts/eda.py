@@ -139,7 +139,7 @@ def main(processed_training_data, plot_to, table_to):
     df_describe = df_corr.describe()
     df_describe = df_describe.transpose()
     
-    df_describe.to_csv(os.path.join(table_to, "df_describe.csv"))
+    df_describe.to_csv(os.path.join(table_to, "df_describe.csv"), index = False)
 
     df_shape = pd.DataFrame({"Metric": ["Rows", "Columns"], "Value": [df_eda.shape[0], df_eda.shape[1]]})
     
