@@ -1,0 +1,8 @@
+Column,Non-Null Count,Data Type
+Age,809,int64
+SystolicBP,809,int64
+DiastolicBP,809,int64
+BS,809,float64
+BodyTemp,809,float64
+HeartRate,809,int64
+RiskLevel,809,object
