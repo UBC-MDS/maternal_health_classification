@@ -35,6 +35,7 @@ import numpy as np
 import pandera as pa
 import click
 import altair as alt
+import pickle
 from IPython.display import Markdown, display
 from tabulate import tabulate
 ```
@@ -104,17 +105,35 @@ Another observation here is that there are quite a lot of outliers for the low r
 
 ## Model Comparison
 
-In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In {tbl-???} you can see that the Gaussian Bayes scored the lowest, with a validation score of ___. Next was the Logistic Regression model with a validation score of ___, close behind was the RBF-SVM model with a validation score of ___. And finally, the best performing model was the Decision Tree Classifier with a validation score of ___. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of ___, and the split criterion 'gini'. 
+```{python}
+model_comparison = pd.read_csv("../results/tables/summary_cv_scores.csv")
+model_comparison.rename(columns={'Unnamed: 0' :'Models'}, inplace=True)
+gb_score = model_comparison.loc[model_comparison['Models'] == 'Gaussian Bayes', 'test_score'].values[0]
+lr_score = model_comparison.loc[model_comparison['Models'] == 'Logistic Regression', 'test_score'].values[0]
+svm_score = model_comparison.loc[model_comparison['Models'] == 'RBF SVM', 'test_score'].values[0]
+dt_score = model_comparison.loc[model_comparison['Models'] == 'Decision Tree', 'test_score'].values[0]
+
+with open('../results/models/dt_tuned_fit.pickle', 'rb') as f:
+    random_search = pickle.load(f)
+
+test_score = pd.read_csv("../results/tables/test_score.csv").values[[0]][0, 0]
+```
+
+In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In @tbl-summary_cv_scores you can see that the Gaussian Bayes scored the lowest, with a validation score of `{python} gb_score`. Next was the Logistic Regression model with a validation score of `{python} lr_score`, close behind was the RBF-SVM model with a validation score of `{python} svm_score`. And finally, the best performing model was the Decision Tree Classifier with a validation score of `{python} dt_score`. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of `{python} random_search.best_params_['max_depth']`, and the split criterion `{python} random_search.best_params_['criterion']`. 
 
 ```{python}
-#random_search.score(X_test, y_test)
+#| label: tbl-summary_cv_scores
+#| tbl-cap: Cross validation scores of models.
+Markdown(model_comparison.to_markdown(index = False))
 ```
 
 ## Reporting Test Score
 After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data.
-Based on the scoring of Decision Tree model on the test data, the model has an accuracy of ___ which is fairly high, but still leaves room for improvement.
+Based on the scoring of Decision Tree model on the test data, the model has an accuracy of `{python} str(round(test_score*100)) + "%"` which is fairly high, but still leaves room for improvement.
 
-In order to answer our primary research question we have identified the first few leaves of our Decision Tree model. Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.
+![Decision Tree (Depth = 3)](../results/figures/decision_tree.png){#fig-decision_tree height=110% width=120%}
+
+In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (@fig-decision_tree). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for mid-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.
 
 
 

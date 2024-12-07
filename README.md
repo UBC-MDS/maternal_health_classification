@@ -76,7 +76,7 @@ python scripts/evaluate_classifier.py \
     --test_data=data/processed/test_df.csv \
     --best_model_from=results/models/dt_tuned_fit.pickle \
     --plot_to=results/figures \
-    --tbl_to=data/processed
+    --tbl_to=results/tables
 
 quarto render reports/maternal_health_classification.qmd --to html
 quarto render report/maternal_health_classification.qmd --to pdf

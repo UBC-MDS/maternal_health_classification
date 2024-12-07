@@ -40,20 +40,10 @@ def main(training_data, best_model_to, tbl_to, seed):
     check_feat_corr = FeatureFeatureCorrelation()
     check_feat_corr_result = check_feat_corr.run(maternal_train_ds)
     
-    # BASELINE MODELL: Dummy Classifier
-    dummy_clf = DummyClassifier()
-    scores = cross_validate(dummy_clf, X_train, y_train, cv=10, return_train_score=True)
-    pd.DataFrame(scores)['test_score'].mean()
-    
-    # Gaussian Bayes
-    gaus_nb_pipe = make_pipeline(StandardScaler(), GaussianNB())
-    gaus_nb_pipe.fit(X_train, y_train)
-    cv_results = cross_validate(gaus_nb_pipe, X_train, y_train, return_train_score=True)
-    results_df = pd.DataFrame(cv_results)
-    results_df.to_csv(os.path.join(tbl_to, "Gaussian_cv_scores.csv"), index=False)
-    
-    # Decision Tree, Logistic Regression, SVC
+    # DummyClassifier, Gaussian Bayes, Decision Tree, Logistic Regression, SVC
     models = {
+        "Dummy Classifier": DummyClassifier(random_state=123),
+        "Gaussian Bayes": GaussianNB(),
         "Decision Tree": DecisionTreeClassifier(random_state=123),
         "RBF SVM": SVC(random_state=123),
         "Logistic Regression": LogisticRegression(max_iter=2000, random_state=123),
@@ -97,7 +87,7 @@ def main(training_data, best_model_to, tbl_to, seed):
             clf_pipe, X_train, y_train, cv=10, return_train_score=True, error_score='raise'
         )
     results_df = pd.DataFrame(results_dict).T
-    results_df.to_csv(os.path.join(tbl_to, "dt_svm_lr_cv_scores.csv"), index=True)
+    results_df.to_csv(os.path.join(tbl_to, "summary_cv_scores.csv"), index=True)
 
     dt = DecisionTreeClassifier(random_state=123)
     

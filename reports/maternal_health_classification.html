@@ -141,7 +141,7 @@ div.csl-indent {
 Table&nbsp;1: Description of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="12">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="20">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 13%">
@@ -250,7 +250,7 @@ Table&nbsp;1: Description of the maternal risk dataset.
 Table&nbsp;2: Information of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_info-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="13">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="21">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -310,7 +310,7 @@ Table&nbsp;2: Information of the maternal risk dataset.
 Table&nbsp;3: Shape of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_shape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="14">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="22">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -373,12 +373,90 @@ Figure&nbsp;3: Boxplot of the Maternal Health Dataset
 </div>
 <section id="model-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="model-comparison">Model Comparison</h2>
-<p>In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In {tbl-???} you can see that the Gaussian Bayes scored the lowest, with a validation score of <strong><em>. Next was the Logistic Regression model with a validation score of </em></strong>, close behind was the RBF-SVM model with a validation score of <strong><em>. And finally, the best performing model was the Decision Tree Classifier with a validation score of </em></strong>. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of ___, and the split criterion ‘gini’.</p>
+<p>In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In <a href="#tbl-summary_cv_scores" class="quarto-xref">Table&nbsp;4</a> you can see that the Gaussian Bayes scored the lowest, with a validation score of 0.598 (+/- 0.033). Next was the Logistic Regression model with a validation score of 0.611 (+/- 0.048), close behind was the RBF-SVM model with a validation score of 0.699 (+/- 0.060). And finally, the best performing model was the Decision Tree Classifier with a validation score of 0.822 (+/- 0.048). After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of 14, and the split criterion entropy.</p>
+<div class="cell" data-execution_count="6">
+<div id="tbl-summary_cv_scores" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary_cv_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Cross validation scores of models.
+</figcaption>
+<div aria-describedby="tbl-summary_cv_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="24">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Models</th>
+<th style="text-align: left;">fit_time</th>
+<th style="text-align: left;">score_time</th>
+<th style="text-align: left;">test_score</th>
+<th style="text-align: left;">train_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Dummy Classifier</td>
+<td style="text-align: left;">0.002 (+/- 0.001)</td>
+<td style="text-align: left;">0.001 (+/- 0.001)</td>
+<td style="text-align: left;">0.413 (+/- 0.006)</td>
+<td style="text-align: left;">0.413 (+/- 0.001)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gaussian Bayes</td>
+<td style="text-align: left;">0.003 (+/- 0.000)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
+<td style="text-align: left;">0.598 (+/- 0.033)</td>
+<td style="text-align: left;">0.607 (+/- 0.004)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Decision Tree</td>
+<td style="text-align: left;">0.005 (+/- 0.004)</td>
+<td style="text-align: left;">0.001 (+/- 0.001)</td>
+<td style="text-align: left;">0.822 (+/- 0.048)</td>
+<td style="text-align: left;">0.930 (+/- 0.004)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RBF SVM</td>
+<td style="text-align: left;">0.019 (+/- 0.003)</td>
+<td style="text-align: left;">0.003 (+/- 0.001)</td>
+<td style="text-align: left;">0.699 (+/- 0.060)</td>
+<td style="text-align: left;">0.718 (+/- 0.006)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Logistic Regression</td>
+<td style="text-align: left;">0.007 (+/- 0.003)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
+<td style="text-align: left;">0.611 (+/- 0.048)</td>
+<td style="text-align: left;">0.616 (+/- 0.009)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
 </section>
 <section id="reporting-test-score" class="level2">
 <h2 class="anchored" data-anchor-id="reporting-test-score">Reporting Test Score</h2>
-<p>After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data. Based on the scoring of Decision Tree model on the test data, the model has an accuracy of ___ which is fairly high, but still leaves room for improvement.</p>
-<p>In order to answer our primary research question we have identified the first few leaves of our Decision Tree model. Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.</p>
+<p>After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data. Based on the scoring of Decision Tree model on the test data, the model has an accuracy of 84% which is fairly high, but still leaves room for improvement.</p>
+<div id="fig-decision_tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decision_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../results/figures/decision_tree.png" style="width:120.0%;height:110.0%" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decision_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Decision Tree (Depth = 3)
+</figcaption>
+</figure>
+</div>
+<p>In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (<a href="#fig-decision_tree" class="quarto-xref">Figure&nbsp;4</a>). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.</p>
 </section>
 </section>
 <section id="references" class="level1 unnumbered">
