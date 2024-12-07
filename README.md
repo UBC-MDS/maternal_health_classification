@@ -57,8 +57,12 @@ python scripts/valid_split.py \
     --raw-data=data/raw/"Maternal Health Risk Data Set.csv" \
     --data-dest=data/processed
 
-# Step 3:
+# Step 3: Running the EDA
 
+python scripts/eda.py \
+    --processed-training-data=data/processed/train_df.csv \
+    --plot-to=results/figures \
+    --table-to=results/tables
 
 # Step 4: Fitting the models on train set
 python scripts/fit_classifier.py \
