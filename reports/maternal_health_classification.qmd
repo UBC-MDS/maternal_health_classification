@@ -19,14 +19,15 @@ Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
 
 # Summary 
 
+
 # Introduction
 
-Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby.
-This report investigates maternal health risks using exploratory data analysis and classification techniques such as Logistic regression, SVC and Naive Bayes to identify key factors that contribute to complications during pregnancy. 
+Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates @maternal_death_causes. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby.
+This report investigates maternal health risks using exploratory data analysis and classification techniques such as Logistic regression, SVC, Naive Bayes, and Decision Tree to identify key factors that contribute to risk during pregnancy. 
 
 The primary question addressed in this project is: What are the key indicators that predict maternal health risks during pregnancy?
 
-To answer this question, a dataset containing information on various maternal health factors was used. Leading to the goal of the project which is to create a predictive model that can evaluate the risk factors associated with pregnancy.
+To answer this question, a dataset containing information on various non-invasive maternal health factors was used. Leading to the goal of the project which is to create a predictive model that can evaluate the risk factors associated with pregnancy.
 
 
 ```{python}
@@ -43,23 +44,24 @@ from tabulate import tabulate
 
 ## About Data 
 
-This dataset was sourced from the @UCI. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database @Pima_indians_data. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels high, medium, or low.
+This dataset was sourced from the @UCI. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database @Pima_indians_data. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels of high, medium, or low. Each row of the data represents the health data for a pregnant woman in rural Bangladesh. Classification for each observation in the dataset was done with help from Dr. Shirin Shabnam @maternal_risk_review.
+
 Column descriptions: 
 
 - Age: Age in years when a woman is pregnant.
 - SystolicBP: Upper value of Blood Pressure in mmHg, another significant attribute during pregnancy.
 - DiastolicBP: Lower value of Blood Pressure in mmHg, another significant attribute during pregnancy.
-- BS: Blood glucose levels is in terms of a molar concentration, mmol/L.
+- BS: Blood glucose levels, in molar concentration, mmol/L.
 - HeartRate: A normal resting heart rate in beats per minute.
 - Risk Level: Predicted Risk Intensity Level during pregnancy considering the previous attribute.
 
 ## Analysis
-To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used @Python for our analysis, more specifically we used the packages: @numpy, @altair, @pandas, @matplotlib, and @scikit-learn. We are going to drop two rows which contain data that is out of normal range. These two rows both include a heart rate of 7 (beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm @heart_rates. Moreover, heart rate during pregnancy typically increases on average, for various reason, though there is no clear upper limit defined to be normal @pregnancy_tachycardia.
-Our dataset has a number of rows that seems to be duplicated, however after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there is only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.
+To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used @Python for our analysis, more specifically we used the following packages: @numpy, @altair, @pandas, @matplotlib, and @scikit-learn. We drop two rows from our dataset which contain data that is out of normal range (a heart rate of 7 beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm @heart_rates. Moreover, heart rate during pregnancy typically increases on average, for various reasons, though there is no clear upper limit defined to be normal @pregnancy_tachycardia.
+Our dataset has a number of rows that seem to be duplicated, however, after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there are only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally, we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.
 
 # Results and Discussion
 
-Let’s begin with a general exploration of our data. Based on the summaries from @tbl-df_describe and @tbl-df_info, we observe that there are no missing values, and all features, except for the target variable, are numeric. 
+We began with a general exploration of our data. Based on the summaries from @tbl-df_describe and @tbl-df_info, we observe that there are no missing values, and all features, except for the target variable, are numeric. 
 
 ```{python}
 #| label: tbl-df_describe
