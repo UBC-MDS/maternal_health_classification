@@ -48,6 +48,7 @@ docker compose up --build
 
 ```
 # Step 1: Download the dataset
+
 python scripts/download_data.py \
     --url="https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip" \
     --write_to=data/raw
@@ -75,7 +76,10 @@ python scripts/evaluate_classifier.py \
     --test_data=data/processed/test_df.csv \
     --best_model_from=results/models/dt_tuned_fit.pickle \
     --plot_to=results/figures \
-    --tbl_to=data/processed
+    --tbl_to=results/tables
+
+quarto render reports/maternal_health_classification.qmd --to html
+quarto render report/maternal_health_classification.qmd --to pdf
 ```
 
 ### Clean up

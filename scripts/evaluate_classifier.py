@@ -26,15 +26,14 @@ def main(test_data, best_model_from, plot_to, tbl_to, seed):
     X_test = test_df.drop(columns=["RiskLevel"])
     y_test = test_df["RiskLevel"]
 
-    X_test.to_csv(os.path.join(tbl_to, "X_test.csv"), index=True)
-    y_test.to_csv(os.path.join(tbl_to, "y_test.csv"), index=True)
-    
     # NEED TO LOAD IN THE BEST MODEL
     with open(best_model_from, 'rb') as f:
         random_search = pickle.load(f)
     
     # Scoring with the best model
-    random_search.score(X_test, y_test)
+    test_score = {'test_score': [random_search.score(X_test, y_test)]}
+    test_score = pd.DataFrame(test_score)
+    test_score.to_csv(os.path.join(tbl_to, "test_score.csv"), index=False)
 
     # Decision Tree plot <- NEED TO SAVE !!!!!!!!!!!!
     plt.figure(figsize=(15, 5))
