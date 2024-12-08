@@ -105,35 +105,37 @@ div.csl-indent {
 <p>Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim</p>
 <section id="summary" class="level1">
 <h1>Summary</h1>
+<p>In this project we are comparing multiple classification models to predict pregnant women’s maternal health risk as low, medium or high from their health data. Maternal health broadly refers to overall health of women during their pregnancy, child birth and their post-natal period <span class="citation" data-cites="who_maternal_health">World Health Organization (<a href="#ref-who_maternal_health" role="doc-biblioref">2024</a>)</span>. A variety of complications can arise during pregnancy, childbirth and soon after that result in maternal death. The World Health Organization defines maternal mortality as “the death of a woman whilst pregnant or within 42 days of delivery or termination of pregnancy, from any cause related to, or aggravated by pregnancy or its management, but excluding deaths from incidental or accidental causes” <span class="citation" data-cites="who_1992">World Health Organization (<a href="#ref-who_1992" role="doc-biblioref">1992</a>)</span>. Thus, maternal health risk refers to the approximate risk level of a woman’s health while pregnant or soon after birth. With our chosen model we aim to identify some key indicators that predict higher maternal health risk. In rural communities where it is costly and difficult to provide consistent medical care, having a method to predict maternal health risk from minimally invasive methods could be greatly beneficial in improving health outcomes for mothers and babies alike <span class="citation" data-cites="maternal_risk_review">Ahmed et al. (<a href="#ref-maternal_risk_review" role="doc-biblioref">2020</a>)</span>. After some initial exploration of classification models we settled on the Decision Tree algorithm for its easily interpretable model and relatively high accuracy score. Based on this Decision Tree model a key indicator of increased maternal health risk was blood sugar. The decision tree our model built based on the dataset suggests that blood sugar higher than 7.95 mmol/l is correlated with a high maternal health risk. However, the model does seem to struggle with classifying low vs.&nbsp;medium maternal health risk. While this is a great first step the model accuracy is not accurate enough to be used in a medical context yet. More research and modelling (perhaps with different models) should be done before deploying this technology in rural communities. Additionally, it should be noted that since this dataset contains health data only from a Pima Indians Diabetes Database the model have may learned a bias specific to unknown genetic factors present in this sample. Thus, a much larger dataset with a diverse sample set should be used to train the model before it is utilized in any communities.</p>
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby. This report investigates maternal health risks using exploratory data analysis and classification techniques such as Logistic regression, SVC and Naive Bayes to identify key factors that contribute to complications during pregnancy.</p>
+<p>Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates <span class="citation" data-cites="maternal_death_causes">Say et al. (<a href="#ref-maternal_death_causes" role="doc-biblioref">2014</a>)</span>. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby. This report investigates maternal health risks using exploratory data analysis and classification techniques such as Logistic regression, SVC, Naive Bayes, and Decision Tree to identify key factors that contribute to risk during pregnancy.</p>
 <p>The primary question addressed in this project is: What are the key indicators that predict maternal health risks during pregnancy?</p>
-<p>To answer this question, a dataset containing information on various maternal health factors was used. Leading to the goal of the project which is to create a predictive model that can evaluate the risk factors associated with pregnancy.</p>
+<p>To answer this question, a dataset containing information on various non-invasive maternal health factors was used. Leading to the goal of the project which is to create a predictive model that can evaluate the risk factors associated with pregnancy.</p>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
 <section id="about-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-data">About Data</h2>
-<p>This dataset was sourced from the <span class="citation" data-cites="UCI">Dua and Graff (<a href="#ref-UCI" role="doc-biblioref">2017</a>)</span>. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database <span class="citation" data-cites="Pima_indians_data">Brownlee (<a href="#ref-Pima_indians_data" role="doc-biblioref">2024</a>)</span>. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels high, medium, or low. Column descriptions:</p>
+<p>This dataset was sourced from the <span class="citation" data-cites="UCI">Dua and Graff (<a href="#ref-UCI" role="doc-biblioref">2017</a>)</span>. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database <span class="citation" data-cites="Pima_indians_data">Brownlee (<a href="#ref-Pima_indians_data" role="doc-biblioref">2024</a>)</span>. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels of high, medium, or low. Each row of the data represents the health data for a pregnant woman in rural Bangladesh. Classification for each observation in the dataset was done with help from Dr.&nbsp;Shirin Shabnam <span class="citation" data-cites="maternal_risk_review">Ahmed et al. (<a href="#ref-maternal_risk_review" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Column descriptions:</p>
 <ul>
 <li>Age: Age in years when a woman is pregnant.</li>
 <li>SystolicBP: Upper value of Blood Pressure in mmHg, another significant attribute during pregnancy.</li>
 <li>DiastolicBP: Lower value of Blood Pressure in mmHg, another significant attribute during pregnancy.</li>
-<li>BS: Blood glucose levels is in terms of a molar concentration, mmol/L.</li>
+<li>BS: Blood glucose levels, in molar concentration, mmol/L.</li>
 <li>HeartRate: A normal resting heart rate in beats per minute.</li>
 <li>Risk Level: Predicted Risk Intensity Level during pregnancy considering the previous attribute.</li>
 </ul>
 </section>
 <section id="analysis" class="level2">
 <h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
-<p>To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used <span class="citation" data-cites="Python">Van Rossum and Drake (<a href="#ref-Python" role="doc-biblioref">2009</a>)</span> for our analysis, more specifically we used the packages: <span class="citation" data-cites="numpy">Harris et al. (<a href="#ref-numpy" role="doc-biblioref">2020</a>)</span>, <span class="citation" data-cites="altair">VanderPlas (<a href="#ref-altair" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="pandas">McKinney (<a href="#ref-pandas" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="matplotlib">Hunter (<a href="#ref-matplotlib" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="scikit-learn">Pedregosa et al. (<a href="#ref-scikit-learn" role="doc-biblioref">2011</a>)</span>. We are going to drop two rows which contain data that is out of normal range. These two rows both include a heart rate of 7 (beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm <span class="citation" data-cites="heart_rates">American Heart Association (<a href="#ref-heart_rates" role="doc-biblioref">2024</a>)</span>. Moreover, heart rate during pregnancy typically increases on average, for various reason, though there is no clear upper limit defined to be normal <span class="citation" data-cites="pregnancy_tachycardia">Coad and Frise (<a href="#ref-pregnancy_tachycardia" role="doc-biblioref">2021</a>)</span>. Our dataset has a number of rows that seems to be duplicated, however after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there is only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.</p>
+<p>To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used <span class="citation" data-cites="Python">Van Rossum and Drake (<a href="#ref-Python" role="doc-biblioref">2009</a>)</span> for our analysis, more specifically we used the following packages: <span class="citation" data-cites="numpy">Harris et al. (<a href="#ref-numpy" role="doc-biblioref">2020</a>)</span>, <span class="citation" data-cites="altair">VanderPlas (<a href="#ref-altair" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="pandas">McKinney (<a href="#ref-pandas" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="matplotlib">Hunter (<a href="#ref-matplotlib" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="scikit-learn">Pedregosa et al. (<a href="#ref-scikit-learn" role="doc-biblioref">2011</a>)</span>. We drop two rows from our dataset which contain data that is out of normal range (a heart rate of 7 beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm <span class="citation" data-cites="heart_rates">American Heart Association (<a href="#ref-heart_rates" role="doc-biblioref">2024</a>)</span>. Moreover, heart rate during pregnancy typically increases on average, for various reasons, though there is no clear upper limit defined to be normal <span class="citation" data-cites="pregnancy_tachycardia">Coad and Frise (<a href="#ref-pregnancy_tachycardia" role="doc-biblioref">2021</a>)</span>. Our dataset has a number of rows that seem to be duplicated, however, after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there are only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally, we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.</p>
 </section>
 </section>
 <section id="results-and-discussion" class="level1">
 <h1>Results and Discussion</h1>
-<p>Let’s begin with a general exploration of our data. Based on the summaries from <a href="#tbl-df_describe" class="quarto-xref">Table&nbsp;1</a> and <a href="#tbl-df_info" class="quarto-xref">Table&nbsp;2</a>, we observe that there are no missing values, and all features, except for the target variable, are numeric.</p>
+<p>We began with a general exploration of our data. Based on the summaries from <a href="#tbl-df_describe" class="quarto-xref">Table&nbsp;1</a> and <a href="#tbl-df_info" class="quarto-xref">Table&nbsp;2</a>, we observe that there are no missing values, and all features, except for the target variable, are numeric.</p>
 <div class="cell" data-execution_count="2">
 <div id="tbl-df_describe" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -403,7 +405,7 @@ Table&nbsp;4: Cross validation scores of models.
 <tr class="odd">
 <td style="text-align: left;">Dummy Classifier</td>
 <td style="text-align: left;">0.002 (+/- 0.001)</td>
-<td style="text-align: left;">0.001 (+/- 0.001)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.413 (+/- 0.006)</td>
 <td style="text-align: left;">0.413 (+/- 0.001)</td>
 </tr>
@@ -416,21 +418,21 @@ Table&nbsp;4: Cross validation scores of models.
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Decision Tree</td>
-<td style="text-align: left;">0.005 (+/- 0.004)</td>
-<td style="text-align: left;">0.001 (+/- 0.001)</td>
+<td style="text-align: left;">0.004 (+/- 0.004)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.822 (+/- 0.048)</td>
 <td style="text-align: left;">0.930 (+/- 0.004)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">RBF SVM</td>
-<td style="text-align: left;">0.019 (+/- 0.003)</td>
+<td style="text-align: left;">0.018 (+/- 0.003)</td>
 <td style="text-align: left;">0.003 (+/- 0.001)</td>
 <td style="text-align: left;">0.699 (+/- 0.060)</td>
 <td style="text-align: left;">0.718 (+/- 0.006)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Logistic Regression</td>
-<td style="text-align: left;">0.007 (+/- 0.003)</td>
+<td style="text-align: left;">0.007 (+/- 0.004)</td>
 <td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.611 (+/- 0.048)</td>
 <td style="text-align: left;">0.616 (+/- 0.009)</td>
@@ -456,7 +458,7 @@ Figure&nbsp;4: Decision Tree (Depth = 3)
 </figcaption>
 </figure>
 </div>
-<p>In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (<a href="#fig-decision_tree" class="quarto-xref">Figure&nbsp;4</a>). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for high-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.</p>
+<p>In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (<a href="#fig-decision_tree" class="quarto-xref">Figure&nbsp;4</a>). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for mid-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.</p>
 </section>
 </section>
 <section id="references" class="level1 unnumbered">
@@ -465,6 +467,9 @@ Figure&nbsp;4: Decision Tree (Depth = 3)
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-maternal_risk_review" class="csl-entry" role="listitem">
+Ahmed, M., M. A. Kashem, M. Rahman, and S. Khatun. 2020. <span>“Review and Analysis of Risk Factor of Maternal Health in Remote Area Using the Internet of Things (IoT).”</span> <em>Lecture Notes in Electrical Engineering</em> 632.
+</div>
 <div id="ref-heart_rates" class="csl-entry" role="listitem">
 American Heart Association. 2024. <span>“Target Heart Rates Chart.”</span> <a href="https://www.heart.org/en/healthy-living/fitness/fitness-basics/target-heart-rates" class="uri">https://www.heart.org/en/healthy-living/fitness/fitness-basics/target-heart-rates</a>.
 </div>
@@ -489,11 +494,20 @@ McKinney, Wes. 2010. <span>“<span>D</span>ata <span>S</span>tructures for <spa
 <div id="ref-scikit-learn" class="csl-entry" role="listitem">
 Pedregosa, F., G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, et al. 2011. <span>“<span class="nocase">Scikit-learn: Machine Learning in Python</span>.”</span> <em>Journal of Machine Learning Research</em> 12: 2825–30.
 </div>
+<div id="ref-maternal_death_causes" class="csl-entry" role="listitem">
+Say, L., D. Chou, A. Gemmill, Ö. Tunçalp, A. B. Moller, J. Daniels, A. M. Gülmezoglu, M. Temmerman, and L. Alkema. 2014. <span>“Global Causes of Maternal Death: A WHO Systematic Analysis.”</span> <em>Lancet Global Health</em> 2 (6): e323–33. <a href="https://doi.org/10.1016/S2214-109X(14)70227-X">https://doi.org/10.1016/S2214-109X(14)70227-X</a>.
+</div>
 <div id="ref-Python" class="csl-entry" role="listitem">
 Van Rossum, Guido, and Fred L. Drake. 2009. <em>Python 3 Reference Manual</em>. Scotts Valley, CA: CreateSpace.
 </div>
 <div id="ref-altair" class="csl-entry" role="listitem">
 VanderPlas, Jake. 2018. <span>“Altair: Interactive Statistical Visualizations for Python.”</span> <em>Journal of Open Source Software</em> 3 (7825, 32): 1057. <a href="https://doi.org/10.21105/joss.01057">https://doi.org/10.21105/joss.01057</a>.
+</div>
+<div id="ref-who_1992" class="csl-entry" role="listitem">
+World Health Organization. 1992. <em>International Classification of Diseases and Related Health Problems</em>. Geneva: World Health Organization.
+</div>
+<div id="ref-who_maternal_health" class="csl-entry" role="listitem">
+———. 2024. <span>“Maternal Health.”</span> <a href="https://www.who.int/health-topics/maternal-health#tab=tab_1">https://www.who.int/health-topics/maternal-health#tab=tab_1</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->
