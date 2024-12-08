@@ -79,7 +79,7 @@ python scripts/evaluate_classifier.py \
     --tbl_to=results/tables
 
 quarto render reports/maternal_health_classification.qmd --to html
-quarto render report/maternal_health_classification.qmd --to pdf
+quarto render reports/maternal_health_classification.qmd --to pdf
 ```
 
 ### Clean up
