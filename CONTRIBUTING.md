@@ -26,12 +26,12 @@ bug, create an associated issue and illustrate the bug with a minimal
 
 To keep the workflow clean and organized, please follow these branch naming conventions when contributing to this project:
 
-	•	docs/: Use this prefix for branches that involve documentation updates or changes.
-        Example: docs/update-readme
-	•	fix/: Use this prefix for branches that fix bugs or issues in the codebase.
-        Example: fix/login-bug
-	•	feature/: Use this prefix for branches that add new features, scripts, or major changes to the codebase.
-        Example: feature/add-authentication
+	•	docs\: Use this prefix for branches that involve documentation updates or changes.
+        Example: docs\update-readme
+	•	fix\: Use this prefix for branches that fix bugs or issues in the codebase.
+        Example: fix\classification-report
+	•	feature\: Use this prefix for branches that add new features, scripts, or major changes to the codebase.
+        Example: feature\add-authentication
 
 ### Code of Conduct
 
