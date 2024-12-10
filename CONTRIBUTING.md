@@ -22,6 +22,17 @@ bug, create an associated issue and illustrate the bug with a minimal
 *  We recommend that you create a Git branch for each pull request (PR).  
 *  New code should follow the tidyverse [style guide](http://style.tidyverse.org) or PEP8 [style guide](https://www.python.org/dev/peps/pep-0008/).
 
+### Branch Naming Conventions
+
+To keep the workflow clean and organized, please follow these branch naming conventions when contributing to this project:
+
+	•	docs\: Use this prefix for branches that involve documentation updates or changes.
+        Example: docs\update-readme
+	•	fix\: Use this prefix for branches that fix bugs or issues in the codebase.
+        Example: fix\classification-report
+	•	feature\: Use this prefix for branches that add new features, scripts, or major changes to the codebase.
+        Example: feature\add-authentication
+
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
