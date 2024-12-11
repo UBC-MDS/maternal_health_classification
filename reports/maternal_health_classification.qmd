@@ -120,6 +120,8 @@ with open('../results/models/dt_tuned_fit.pickle', 'rb') as f:
     random_search = pickle.load(f)
 
 test_score = pd.read_csv("../results/tables/test_score.csv").values[[0]][0, 0]
+
+confusion_matrix = pd.read_csv("../results/tables/confusion_matrix.csv")
 ```
 
 In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In @tbl-summary_cv_scores you can see that the Gaussian Bayes scored the lowest, with a validation score of `{python} gb_score`. Next was the Logistic Regression model with a validation score of `{python} lr_score`, close behind was the RBF-SVM model with a validation score of `{python} svm_score`. And finally, the best performing model was the Decision Tree Classifier with a validation score of `{python} dt_score`. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of `{python} random_search.best_params_['max_depth']`, and the split criterion `{python} random_search.best_params_['criterion']`. 
@@ -131,8 +133,9 @@ Markdown(model_comparison.to_markdown(index = False))
 ```
 
 ## Reporting Test Score
-After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data.
-Based on the scoring of Decision Tree model on the test data, the model has an accuracy of `{python} str(round(test_score*100)) + "%"` which is fairly high, but still leaves room for improvement.
+After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data. Based on the scoring of Decision Tree model on the test data, the model has an accuracy of `{python} str(round(test_score*100)) + "%"` which is fairly high, but still leaves room for improvement. @fig-confusion_matrix_dt shows the confusion matrix of the decision tree on the test data. Firstly, the model has correctly classified a significant number of high-risk instances (`{python} confusion_matrix.iloc[0,0]`), but there are some false negatives where high-risk patients were classified as mid-risk or low-risk. This could be concerning in a clinical setting because these patients may not receive the urgent care they need. Subsequently, the model was able to identified most low-risk patients (`{python} confusion_matrix.iloc[1,1]`), but some false negatives still occur. These cases may not be as critical in a clinical context, but improving the accuracy for low-risk predictions could further optimize care. Lastly, the model also performed well in predicting mid-risk patients (`{python} confusion_matrix.iloc[2,2]`), with relatively fewer false positives. However, these false negatives could also mean that some mid-risk patients were categorized as low-risk, which may lead to under-treatment.
+
+![Confusion Matrix of Decision Tree](../results/figures/confusion_matrix.png){#fig-confusion_matrix_dt}
 
 ![Decision Tree (Depth = 3)](../results/figures/decision_tree.png){#fig-decision_tree height=110% width=120%}
 
