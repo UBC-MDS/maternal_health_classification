@@ -9,6 +9,8 @@ import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix
 
 @click.command()
 @click.option('--test_data', type=str, help="Path to test data")
@@ -35,7 +37,7 @@ def main(test_data, best_model_from, plot_to, tbl_to, seed):
     test_score = pd.DataFrame(test_score)
     test_score.to_csv(os.path.join(tbl_to, "test_score.csv"), index=False)
 
-    # Decision Tree plot <- NEED TO SAVE !!!!!!!!!!!!
+    # Decision Tree plot 
     plt.figure(figsize=(15, 5))
     plot_tree(
         random_search.best_estimator_,
@@ -45,6 +47,17 @@ def main(test_data, best_model_from, plot_to, tbl_to, seed):
         max_depth=3  # Adjust the depth for better readability
     )
     plt.savefig(os.path.join(plot_to, "decision_tree.png"))
+
+    confmat_dt = ConfusionMatrixDisplay.from_predictions(
+        y_test,
+        random_search.predict(X_test),
+        display_labels=random_search.best_estimator_.classes_
+    )
+    plt.title('Confusion Matrix for Decision Tree')
+    plt.savefig(os.path.join(plot_to, "confusion_matrix.png"))
+
+    cm = confusion_matrix(y_test, random_search.predict(X_test))
+    pd.DataFrame(cm).to_csv(os.path.join(tbl_to, "confusion_matrix.csv"), index=False)
     
 
 if __name__ == '__main__':
