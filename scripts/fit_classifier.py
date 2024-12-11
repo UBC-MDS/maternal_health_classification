@@ -4,6 +4,7 @@
 
 import pandas as pd
 import os
+import sys
 import numpy as np
 import click
 import pickle
@@ -20,6 +21,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import plot_tree
 from deepchecks.tabular import Dataset
 from deepchecks.tabular.checks.data_integrity import FeatureFeatureCorrelation
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.cross_validation import mean_std_cross_val_scores
 
 @click.command()
 @click.option('--training-data', type=str, help="Path to training data")
@@ -48,36 +51,6 @@ def main(training_data, best_model_to, tbl_to, seed):
         "RBF SVM": SVC(random_state=123),
         "Logistic Regression": LogisticRegression(max_iter=2000, random_state=123),
     }
-    
-    # The function below is adopted from DSCI571 Supervides Learning I Lecture 4 notes
-    def mean_std_cross_val_scores(model, X_train, y_train, **kwargs):
-        """
-        Returns mean and std of cross validation
-    
-        Parameters
-        ----------
-        model :
-            scikit-learn model
-        X_train : numpy array or pandas DataFrame
-            X in the training data
-        y_train :
-            y in the training data
-    
-        Returns
-        ----------
-            pandas Series with mean scores from cross_validation
-        """
-    
-        scores = cross_validate(model, X_train, y_train, **kwargs)
-    
-        mean_scores = pd.DataFrame(scores).mean()
-        std_scores = pd.DataFrame(scores).std()
-        out_col = []
-    
-        for i in range(len(mean_scores)):
-            out_col.append((f"%0.3f (+/- %0.3f)" % (mean_scores.iloc[i], std_scores.iloc[i])))
-    
-        return pd.Series(data=out_col, index=mean_scores.index)
     
     results_df = None
     results_dict = {}
