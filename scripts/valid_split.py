@@ -7,6 +7,8 @@ import pandas as pd
 import pandera as pa
 import numpy as np
 import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.data_validation import data_validation
 from deepchecks.tabular import Dataset
 from deepchecks.tabular.checks.data_integrity import FeatureFeatureCorrelation
 from sklearn.model_selection import train_test_split
@@ -29,24 +31,8 @@ def main(raw_data, data_dest, seed):
     #Drop two rows with out of range data
     df = df[df['HeartRate'] != 7]
 
-    # validate data
-    schema = pa.DataFrameSchema(
-        {
-            "RiskLevel": pa.Column(str, pa.Check.isin(["high risk", "mid risk", "low risk"])),
-            "Age": pa.Column(int, pa.Check.between(10, 70)),
-            "SystolicBP": pa.Column(int, pa.Check.between(65, 185)),
-            "DiastolicBP": pa.Column(int, pa.Check.between(40, 125)),
-            "BS": pa.Column(float, pa.Check.between(3, 20)),
-            "BodyTemp": pa.Column(float, pa.Check.between(94, 105)),
-            "HeartRate": pa.Column(int, pa.Check.between(50, 110))
-        },
-        checks=[
-            pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error="Empty rows present.")
-        ]
-    )
-
     # Run validation tests on our dataframe
-    schema.validate(df, lazy=True)
+    data_validation(df)
     
     # Split data into train and test sets and save
     train_df, test_df = train_test_split(df, test_size=0.2, random_state=seed)
