@@ -1,6 +1,15 @@
-.PHONY: all clean
+.PHONY: all clean data
 
 all: reports/maternal_health_classification.html reports/maternal_health_classification.pdf
+
+# Generate all the data needed
+data: data/raw/Maternal Health Risk Data Set.csv data/processed/test_df.csv data/processed/train_df.csv data/processed/scaled_test_df.csv data/processed/scaled_train_df.csv
+
+# Genearte all the figures
+figures: results/figures/boxplot_by_risk_level.png results/figures/countplot_of_risk_level.png results/figures/heatmap_of_the_maternal_health.png results/figures/confusion_matrix.png results/figures/decision_tree.png
+
+# Genearte all the tables
+tables: results/tables/df_describe.csv results/tables/df_info.csv results/tables/df_shape.csv results/tables/summary_cv_scores.csv results/tables/confusion_matrix.csv results/tables/test_score.csv
 
 # Download and extract data from zip
 data/raw/Maternal Health Risk Data Set.csv: scripts/download_data.py
