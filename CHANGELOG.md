@@ -68,19 +68,6 @@ Could not reproducibly run the analysis because there is no instructions.
 Nelli Hovhannisyan
 
 **Feedback:** 
-Could not reproducibly run the analysis because there is no instructions.
-**URL:** 
-
-**Commit:**
-
-**Commit Messages:** 
-
-**Pull Request:**
-
-**Addressed By:**
-Nelli Hovhannisyan
-
-**Feedback:** 
 [Code of Conduct] The email under "enforcement" should be tied to the team
 **URL:** 
 

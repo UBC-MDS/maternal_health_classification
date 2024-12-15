@@ -82,7 +82,15 @@ where you launched the container, and then type `docker compose rm`
 
 4. The `docker-compose.yml` file will be updated automatically with GitHub Actions.
    
-5. Send a pull request to merge the changes into the `main` branch. 
+5. Send a pull request to merge the changes into the `main` branch.
+
+### Test Suite 
+
+Use the same `docker compose up` command as described in the [Running the analysis](#running-the-analysis) section above
+to launch Jupyter lab, if it's not already launched. 
+Tests are run using the `pytest` command in the root of the project.
+More details about the test suite can be found in the 
+[`tests`](tests) directory.
 
 # License
 The Maternal Health Risk report contained herein are licensed under the [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/). 
