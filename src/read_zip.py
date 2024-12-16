@@ -4,7 +4,8 @@ import requests
 
 def read_zip(url, directory):
     """
-    Read a zip file from the given URL and extract its contents to the specified directory.
+    Read a zip file from the given URL and extract its contents to the specified directory,
+    replacing any existing files in the directory if necessary.
 
     Parameters:
     ----------
@@ -33,19 +34,28 @@ def read_zip(url, directory):
     with open(zip_path, 'wb') as file:
         file.write(response.content)
 
-    original_contents = set(os.listdir(directory))
-
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_file_contents = zip_ref.namelist()
+
+            # Check if the zip file is empty
+            if not zip_file_contents:
+                raise ValueError('The ZIP file is empty or contains no new files.')
+
+            # Clear existing files in the directory that match zip file contents
+            for file_name in zip_file_contents:
+                file_path = os.path.join(directory, file_name)
+                if os.path.exists(file_path):
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                    elif os.path.isdir(file_path):
+                        import shutil
+                        shutil.rmtree(file_path)
+
+            # Extract the zip file
             zip_ref.extractall(directory)
     except zipfile.BadZipFile:
         raise ValueError('The provided file is not a valid zip file.')
 
-    current_contents = set(os.listdir(directory))
-    extracted_files = current_contents - original_contents
-    if not extracted_files:
-        raise ValueError('The ZIP file is empty or contains no new files.')
 
-    os.remove(zip_path)
-
-    print(f"Extraction successful! Extracted files: {extracted_files}")
+    print(f"Extraction successful! Extracted files: {zip_file_contents}")
