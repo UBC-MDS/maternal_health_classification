@@ -52,7 +52,7 @@ def create_boxplots(df_eda, plot_to):
             y=alt.Y(f'{col}:Q', title=col),
             color='RiskLevel:N'
         ).properties(
-            title=f'Boxplot of {col} by RiskLevel',
+            title=f'Comparing {col} Across Risk Levels',
             width=300, height=200
         )
         for col in columns
