@@ -17,7 +17,7 @@ or more specifically [this file](https://archive.ics.uci.edu/static/public/863/m
 Classification for each observation in the dataset was done with help from Dr. Shirin Shabnam (Ahmed, Kashem, Rahman, & Khatun, 2020).
 
 # Report
-A link to our report can be found here.
+A link to our report can be found [here](https://ubc-mds.github.io/maternal_health_classification/)
 
 ## Dependencies
 - [Docker](https://www.docker.com/) 
