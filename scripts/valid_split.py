@@ -7,6 +7,7 @@ import pandas as pd
 import pandera as pa
 import numpy as np
 import os
+import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.data_validation import data_validation
 from deepchecks.tabular import Dataset

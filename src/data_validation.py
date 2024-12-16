@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 
-def data_validation(raw_data, data_dest, seed):
+def data_validation(df):
     """
     Validates maternal health risk data
 
@@ -25,6 +25,11 @@ def data_validation(raw_data, data_dest, seed):
     -----------
     This function does not return anything, it validates the maternal health dataset.
     """
+
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError(f"Expected a pandas DataFrame, got {type(df)}")
+    if df.shape[0] == 0:
+        raise ValueError("Cannot validate empty an dataframe.")
 
     # validate data
     schema = pa.DataFrameSchema(
