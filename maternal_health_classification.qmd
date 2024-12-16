@@ -1,0 +1,150 @@
+---
+title: Classification Model for identifying Maternal Health Risk
+format: 
+    html:
+        toc: true
+        toc-depth: 2
+    pdf:
+        toc: true
+        toc-depth: 2
+editor: source
+bibliography: references.bib
+execute:
+    echo: false
+    warning: false
+---
+
+
+Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
+
+# Summary 
+
+In this project we are comparing multiple classification models to predict pregnant women's maternal health risk as low, medium or high from their health data. Maternal health broadly refers to overall health of women during their pregnancy, child birth and their post-natal period [@who_maternal_health]. A variety of complications can arise during pregnancy, childbirth and soon after that result in maternal death. The World Health Organization defines maternal mortality as "the death of a woman whilst pregnant or within 42 days of delivery or termination of pregnancy, from any cause related to, or aggravated by pregnancy or its management, but excluding deaths from incidental or accidental causes" [@who_1992]. Thus, maternal health risk refers to the approximate risk level of a woman's health while pregnant or soon after birth. With our chosen model we aim to identify some key indicators that predict higher maternal health risk. In rural communities where it is costly and difficult to provide consistent medical care, having a method to predict maternal health risk from minimally invasive methods could be greatly beneficial in improving health outcomes for mothers and babies alike [@maternal_risk_review]. After some initial exploration of classification models we settled on the Decision Tree algorithm for its easily interpretable model and relatively high accuracy score. Based on this Decision Tree model a key indicator of increased maternal health risk was blood sugar. The decision tree our model built based on the dataset suggests that blood sugar higher than 7.95 mmol/l is correlated with a high maternal health risk. However, the model does seem to struggle with classifying low vs. medium maternal health risk. While this is a great first step the model accuracy is not accurate enough to be used in a medical context yet. More research and modelling (perhaps with different models) should be done before deploying this technology in rural communities. Additionally, it should be noted that since this dataset contains health data only from a Pima Indians Diabetes Database the model have may learned a bias specific to unknown genetic factors present in this sample. Thus, a much larger dataset with a diverse sample set should be used to train the model before it is utilized in any communities.
+
+# Introduction
+
+Maternal health remains a critical issue worldwide, especially in rural regions and among lower-middle-class families in emerging countries. The lack of access to proper healthcare, inadequate information about maternal care, and insufficient monitoring during pregnancy contribute to high maternal mortality rates [@maternal_death_causes]. The significance of timely interventions and constant monitoring during pregnancy cannot be overstated, as each moment is crucial to ensuring the health and safety of both the mother and the baby.
+This report investigates maternal health risks using exploratory data analysis and classification techniques such as Logistic regression, SVC, Naive Bayes, and Decision Tree to identify key factors that contribute to risk during pregnancy. 
+
+The primary question addressed in this project is: What are the key indicators that predict maternal health risks during pregnancy?
+
+To answer this question, a dataset containing information on various non-invasive maternal health factors was used. Leading to the goal of the project which is to create a predictive model that can evaluate the risk factors associated with pregnancy.
+
+
+```{python}
+import pandas as pd
+import numpy as np
+import pandera as pa
+import click
+import altair as alt
+import pickle
+from IPython.display import Markdown, display
+from tabulate import tabulate
+```
+# Methods
+
+## About Data 
+
+This dataset was sourced from the @UCI. It was collected from rural areas of Bangladesh from various hospitals, community clinics, and maternal healthcare centers; each row in this dataset is health data from a pregnant woman from the Pima Indians Diabetes Database [@Pima_indians_data]. The dataset collects various non-invasive health data with a goal of predicting maternal health risk at the levels of high, medium, or low. Each row of the data represents the health data for a pregnant woman in rural Bangladesh. Classification for each observation in the dataset was done with help from Dr. Shirin Shabnam [@maternal_risk_review].
+
+Column descriptions: 
+
+- Age: Age in years when a woman is pregnant.
+- SystolicBP: Upper value of Blood Pressure in mmHg, another significant attribute during pregnancy.
+- DiastolicBP: Lower value of Blood Pressure in mmHg, another significant attribute during pregnancy.
+- BS: Blood glucose levels, in molar concentration, mmol/L.
+- HeartRate: A normal resting heart rate in beats per minute.
+- Risk Level: Predicted Risk Intensity Level during pregnancy considering the previous attribute.
+
+## Analysis
+To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used @Python for our analysis, more specifically we used the following packages: Numpy [@numpy], Altair [@altair], Pandas [@pandas], Matplotlib [@matplotlib], and Scikit-learn [@scikit-learn]. We drop two rows from our dataset which contain data that is out of normal range (a heart rate of 7 beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm [@heart_rates]. Moreover, heart rate during pregnancy typically increases on average, for various reasons, though there is no clear upper limit defined to be normal [@pregnancy_tachycardia].
+Our dataset has a number of rows that seem to be duplicated, however, after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there are only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally, we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.
+
+# Results and Discussion
+
+We began with a general exploration of our data. Based on the summaries from @tbl-df_describe and @tbl-df_info, we observe that there are no missing values, and all features, except for the target variable, are numeric. 
+
+```{python}
+#| label: tbl-df_describe
+#| tbl-cap: Description of the maternal risk dataset.
+
+df_describe_table = pd.read_csv("../results/tables/df_describe.csv")
+Markdown(df_describe_table.to_markdown(index = False))
+```
+
+```{python}
+#| label: tbl-df_info
+#| tbl-cap: Information of the maternal risk dataset.
+
+df_info_table = pd.read_csv("../results/tables/df_info.csv")
+Markdown(df_info_table.to_markdown(index = False))
+```
+
+Although the dataset has a relatively small number of observations (@tbl-df_shape), it should still be sufficient for initial modeling efforts.
+
+```{python}
+#| label: tbl-df_shape
+#| tbl-cap: Shape of the maternal risk dataset.
+
+df_shape_table = pd.read_csv("../results/tables/df_shape.csv")
+Markdown(df_shape_table.to_markdown(index = False))
+```
+
+From the @fig-countplot_of_risk_level, we can observe that the data is relatively balanced, with the "high risk" category having the fewest observations and the "low risk" category having the most.
+
+![Countplot of the Risk Level variable](../results/figures/countplot_of_risk_level.png){#fig-countplot_of_risk_level width=80%}
+
+Let’s discuss some of the relationships observed in the heatmap of the dataset seen in @fig-heatmap_of_the_maternal_health:
+
+- The “Risk Level,” our target variable, shows a noticeable correlation with “Blood Pressure.” This suggests that individuals with higher or lower blood pressure levels may fall into distinct risk categories. As a result, “Blood Pressure” could be an important predictor in the later stages of our analysis.
+- The systolic (upper) and diastolic (lower) blood pressure values exhibit a strong correlation, which is expected since both are closely related physiological metrics. Although we might have considered dropping one of them, the correlation remains below 0.8, so we will retain both, as they may still provide valuable insights when combined with other features.
+
+![Heatmap of the Maternal Health Dataset](../results/figures/heatmap_of_the_maternal_health.png){#fig-heatmap_of_the_maternal_health width=70%}
+
+We can see from the boxplots (@fig-boxplot_by_risk_level) that women in the high-risk group generally have higher values across all our features. For example, older women are more likely to be classified as high risk. Additionally, the high-risk group shows a wider range for upper blood pressure and blood glucose levels, with the median value being slightly higher than that of the other groups.
+Another observation here is that there are quite a lot of outliers for the low risk category.
+
+![Boxplot of the Maternal Health Dataset](../results/figures/boxplot_by_risk_level.png){#fig-boxplot_by_risk_level height=60% width=70%}
+
+## Model Comparison
+
+```{python}
+model_comparison = pd.read_csv("../results/tables/summary_cv_scores.csv")
+model_comparison.rename(columns={'Unnamed: 0' :'Models'}, inplace=True)
+gb_score = model_comparison.loc[model_comparison['Models'] == 'Gaussian Bayes', 'test_score'].values[0]
+lr_score = model_comparison.loc[model_comparison['Models'] == 'Logistic Regression', 'test_score'].values[0]
+svm_score = model_comparison.loc[model_comparison['Models'] == 'RBF SVM', 'test_score'].values[0]
+dt_score = model_comparison.loc[model_comparison['Models'] == 'Decision Tree', 'test_score'].values[0]
+
+with open('../results/models/dt_tuned_fit.pickle', 'rb') as f:
+    random_search = pickle.load(f)
+
+test_score = pd.read_csv("../results/tables/test_score.csv").values[[0]][0, 0]
+
+confusion_matrix = pd.read_csv("../results/tables/confusion_matrix.csv")
+```
+
+In choosing a classifier model we tried several including: Gaussian Bayes, Logistic Regression, Decision Tree, RBF-SVC. We also included a Dummy Classifier to compare our model to. In @tbl-summary_cv_scores you can see that the Gaussian Bayes scored the lowest, with a validation score of `{python} gb_score`. Next was the Logistic Regression model with a validation score of `{python} lr_score`, close behind was the RBF-SVM model with a validation score of `{python} svm_score`. And finally, the best performing model was the Decision Tree Classifier with a validation score of `{python} dt_score`. After choosing the Decision Tree as our model we performed hyperparamter tuning with RandomSearchCV to choose the best max depth, and the split criterion. From this search we found the best validation score with a max depth of `{python} random_search.best_params_['max_depth']`, and the split criterion `{python} random_search.best_params_['criterion']`. 
+
+```{python}
+#| label: tbl-summary_cv_scores
+#| tbl-cap: Cross validation scores of models.
+Markdown(model_comparison.to_markdown(index = False))
+```
+
+## Reporting Test Score
+After finding the best hyperparameters for the Decision Tree, we moved on to scoring our model using the testing data to ascertain how well the Decision Tree performs on unseen data. Based on the scoring of Decision Tree model on the test data, the model has an accuracy of `{python} str(round(test_score*100)) + "%"` which is fairly high, but still leaves room for improvement. @fig-confusion_matrix_dt shows the confusion matrix of the decision tree on the test data. Firstly, the model has correctly classified a significant number of high-risk instances (`{python} confusion_matrix.iloc[0,0]`), but there are some false negatives where high-risk patients were classified as mid-risk or low-risk. This could be concerning in a clinical setting because these patients may not receive the urgent care they need. Subsequently, the model was able to identified most low-risk patients (`{python} confusion_matrix.iloc[1,1]`), but some false negatives still occur. These cases may not be as critical in a clinical context, but improving the accuracy for low-risk predictions could further optimize care. Lastly, the model also performed well in predicting mid-risk patients (`{python} confusion_matrix.iloc[2,2]`), with relatively fewer false positives. However, these false negatives could also mean that some mid-risk patients were categorized as low-risk, which may lead to under-treatment.
+
+![Confusion Matrix of Decision Tree](../results/figures/confusion_matrix.png){#fig-confusion_matrix_dt}
+
+![Decision Tree (Depth = 3)](../results/figures/decision_tree.png){#fig-decision_tree height=110% width=120%}
+
+In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (@fig-decision_tree). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for mid-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.
+
+## Conclusion
+The Decision Tree model performed fairly well, however given the intention of the data, which is to gather health data of pregnant women in rural communities and predict their health risk so a doctor can assess them in person, a much higher score is needed. Specifically, a model that minimizes false negatives to zero would be necessary since we wouldn't want to have anyone falsely predicted as mid risk when they are high risk and need to see a doctor. Thus, we recommend a more diverse set of data be collected from the communities that would implement a project such as this. Additionally, more exploration of the best model types as well as feature engineering to give the best possible model performance should be done.
+
+
+# References
+
+
