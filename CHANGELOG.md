@@ -139,14 +139,15 @@ Include a subsection in Discussion with our conclusions at the end of the report
 **Feedback:** 
 Change the title of the boxplots
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/100
 **Commit:**
-
+de4019e67054a0eccd3bc2a68a8d42f2ee49f6c1
 **Commit Messages:** 
-
+updated the title of boxplots
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/100
 **Addressed By:**
+Nelli Hovhannisyan
 
 **Feedback:** 
 fix in-text package citations
