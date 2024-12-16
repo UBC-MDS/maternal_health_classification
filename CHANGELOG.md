@@ -7,7 +7,7 @@ Abstract/summary is missing
 **URL:** 
 https://github.com/UBC-MDS/maternal_health_classification/commit/2cf235395ec415a52a87b8e7b273d5f343c9df35
 **Commit:**
-2cf2353
+2cf235395ec415a52a87b8e7b273d5f343c9df35
 **Commit Messages:** 
 added summary and general info on maternal health
 **Pull Request:**
@@ -31,28 +31,15 @@ Joseph Lim
 **Feedback:** 
 To improve clarity of your "about" section, I'd add an explanation of what "maternal health risk" means
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/commit/2cf235395ec415a52a87b8e7b273d5f343c9df35
 **Commit:**
-
+991ee0c327c959f920e78299b2d29df1f3e0c520
 **Commit Messages:** 
-
+added summary and general info on maternal health
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/64
 **Addressed By:**
-
-
-**Feedback:** 
-To improve clarity of your "about" section, I'd add an explanation of what "maternal health risk" means
-**URL:** 
-
-**Commit:**
-
-**Commit Messages:** 
-
-**Pull Request:**
-
-**Addressed By:**
-
+Shannon Pflueger
 
 **Feedback:** 
 Could not reproducibly run the analysis because there is no instructions.
@@ -96,27 +83,27 @@ Nelli Hovhannisyan
 **Feedback:** 
 Add what maternal health risk is to README
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/commit/991ee0c327c959f920e78299b2d29df1f3e0c520
 **Commit:**
-
+991ee0c327c959f920e78299b2d29df1f3e0c520
 **Commit Messages:** 
-
+added maternal risk definition to readme
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/102
 **Addressed By:**
-
+Shannon Pflueger
 
 # Milestone 2 Feedbacks
 **Feedback:** 
 Missed "validate missingness not beyond expected threshold". If any null values are present in the DataFrame, Pandera will not raise an error unless you configure the column to check for null values or require them to be non-null.
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/commit/b425a0c806ba582d3087266bf466351c0ad4a7f1
 **Commit:**
-
+b425a0c806ba582d3087266bf466351c0ad4a7f1
 **Commit Messages:** 
-
+added missingness threshold validation test
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/98
 **Addressed By:**
 Shannon Pflueger
 
@@ -139,15 +126,15 @@ Nelli Hovhannisyan
 **Feedback:** 
 Include a subsection in Discussion with our conclusions at the end of the report
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/102/commits/ab68bd2817aebab9bfb389e3638db7cd2fbcad7d
 **Commit:**
-
+ab68bd2817aebab9bfb389e3638db7cd2fbcad7d
 **Commit Messages:** 
-
+added conclusion to report and rendered to html and pdf
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/102
 **Addressed By:**
-
+Shannon Pflueger
 
 **Feedback:** 
 Change the title of the boxplots
@@ -161,14 +148,16 @@ Change the title of the boxplots
 
 **Addressed By:**
 
+
 **Feedback:** 
 fix in-text package citations
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/commit/a9d267aa7e8f491d54e862e71ebc5c1fe467ea86
 **Commit:**
-
+a9d267aa7e8f491d54e862e71ebc5c1fe467ea86
 **Commit Messages:** 
-
+fixed python pkg in-text citations
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/98
 **Addressed By:**
+Shannon Pflueger
