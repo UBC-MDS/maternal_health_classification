@@ -43,7 +43,8 @@ def data_validation(df):
             "HeartRate": pa.Column(int, pa.Check.between(50, 110))
         },
         checks=[
-            pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error="Empty rows present.")
+            pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error="Empty rows present."),
+            pa.Check(lambda df: (df.isna().sum() / len(df) < 0.1).all(), error="Some columns have more than 10% missing values.")
         ]
     )
 
