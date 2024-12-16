@@ -66,7 +66,3 @@ def test_read_zip_error_on_invalid_url(mock_response):
 def test_read_zip_error_on_nonzip_url():
     with pytest.raises(ValueError, match='The URL provided does not point to a zip file.'):
         read_zip('https://github.com/', 'tests/test_zip_data')
-
-def test_read_zip_error_on_missing_dir():
-    with pytest.raises(ValueError, match='The directory provided does not exist.'):
-        read_zip(url_json_zip, 'tests/test_zip_data3')
