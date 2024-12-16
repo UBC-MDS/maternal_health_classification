@@ -44,41 +44,28 @@ Shannon Pflueger
 **Feedback:** 
 Could not reproducibly run the analysis because there is no instructions.
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/commit/01e8bba49c295fbbd0c41b1edb96e39ed0db0406
 **Commit:**
-
+01e8bba49c295fbbd0c41b1edb96e39ed0db0406
 **Commit Messages:** 
-
+updated README with Makefile instruction
 **Pull Request:**
-
+2 PRs for the Makefile and before separate scripts
 **Addressed By:**
-Nelli Hovhannisyan
-
-**Feedback:** 
-Could not reproducibly run the analysis because there is no instructions.
-**URL:** 
-
-**Commit:**
-
-**Commit Messages:** 
-
-**Pull Request:**
-
-**Addressed By:**
-Nelli Hovhannisyan
+Nelli Hovhannisyan, Joseph Lim
 
 **Feedback:** 
 [Code of Conduct] The email under "enforcement" should be tied to the team
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/99/commits/9a8f64d96b890d6cae682713974c53ae2babf793
 **Commit:**
-
+9a8f64d96b890d6cae682713974c53ae2babf793
 **Commit Messages:** 
-
+edited the code of conduct with our emails 
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/99
 **Addressed By:**
-
+Nelli Hovhannisyan
 
 **Feedback:** 
 Add what maternal health risk is to README
@@ -139,14 +126,15 @@ Shannon Pflueger
 **Feedback:** 
 Change the title of the boxplots
 **URL:** 
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/100
 **Commit:**
-
+de4019e67054a0eccd3bc2a68a8d42f2ee49f6c1
 **Commit Messages:** 
-
+updated the title of boxplots
 **Pull Request:**
-
+https://github.com/UBC-MDS/maternal_health_classification/pull/100
 **Addressed By:**
+Nelli Hovhannisyan
 
 
 **Feedback:** 

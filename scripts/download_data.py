@@ -1,83 +1,36 @@
 # download_data.py
 # author: Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
-# date: 2024-12-4
-# reference: ttimbers/breast-cancer-predictor
+# date: 2024-12-14
 
 import click
 import os
-import zipfile
+import sys
+import logging
 import requests
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.read_zip import read_zip
 
 
-def read_zip(url, directory):
-    """
-    Read a zip file from the given URL and extract its contents to the specified directory.
-
-    Parameters:
-    ----------
-    url : str
-        The URL of the zip file to be read.
-    directory : str
-        The directory where the contents of the zip file will be extracted.
-
-    Returns:
-    -------
-    None
-    """
-    request = requests.get(url)
-    filename_from_url = os.path.basename(url)
-
-    # check if URL exists, if not raise an error
-    if request.status_code != 200:
-        raise ValueError('The URL provided does not exist.')
-    
-    # check if the URL points to a zip file, if not raise an error  
-    #if request.headers['content-type'] != 'application/zip':
-    if filename_from_url[-4:] != '.zip':
-        raise ValueError('The URL provided does not point to a zip file.')
-    
-    # check if the directory exists, if not raise an error
-    if not os.path.isdir(directory):
-        raise ValueError('The directory provided does not exist.')
-
-    # write the zip file to the directory
-    path_to_zip_file = os.path.join(directory, filename_from_url)
-    with open(path_to_zip_file, 'wb') as f:
-        f.write(request.content)
-
-    # get list of files/directories in the directory
-    original_files = os.listdir(directory)
-    original_timestamps = []
-    for filename in original_files:
-        filename = os.path.join(directory, filename)
-        original_timestamp = os.path.getmtime(filename)
-        original_timestamps.append(original_timestamp)
-
-    # extract the zip file to the directory
-    with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-        zip_ref.extractall(directory)
-
-    # check if any files were extracted, if not raise an error
-    # get list of files/directories in the directory
-    current_files = os.listdir(directory)
-    current_timestamps = []
-    for filename in current_files:
-        filename = os.path.join(directory, filename)
-        current_timestamp = os.path.getmtime(filename)
-        current_timestamps.append(current_timestamp)
-    if (len(current_files) == len(original_files)) & (original_timestamps == current_timestamps):
-        raise ValueError('The ZIP file is empty.')
+# Set up logging for better error handling and debugging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @click.command()
-@click.option('--url', type=str, help="URL of dataset to be downloaded")
-@click.option('--write_to', type=str, help="Path to directory where raw data will be written to")
+@click.option('--url', type = str, help = "URL of dataset to be downloaded", required = True)
+@click.option('--write_to', type = str, help = "Path to directory where raw data will be written to", required = True)
 def main(url, write_to):
-    """Downloads data zip data from the web to a local filepath and extracts it."""
+    """Downloads zip data from the web to a local filepath and extracts it."""
     try:
+        os.makedirs(write_to, exist_ok = True)
+        logging.info(f"Starting the process to download and extract data from {url} to {write_to}...")
         read_zip(url, write_to)
-    except:
-        os.makedirs(write_to)
-        read_zip(url, write_to)
+        logging.info(f"Data successfully downloaded and extracted to {write_to}")
+        
+    except ValueError as e:
+        logging.error(f"Error: {e}")
+        sys.exit(1)
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
