@@ -3,7 +3,7 @@ authors: Shannon Pflueger, Nelli Hovhannisyan, Joseph Lim
 
 # About
 In this project we are comparing multiple classification models to predict pregnant women's maternal health risk as low, medium or high from their health data. With our chosen model
-we aim to identify some key indicators that predict higher maternal health risk. In rural communities where it is costly and difficult to provide consistent medical care, having a method to predict 
+we aim to identify some key indicators that predict higher maternal health risk. Maternal health broadly refers to overall health of women during their pregnancy, child birth and their post-natal period (World Health Organization, 2024). A variety of complications can arise during pregnancy, childbirth and soon after that result in maternal death. The World Health Organization (1992) defines maternal mortality as "the death of a woman whilst pregnant or within 42 days of delivery or termination of pregnancy, from any cause related to, or aggravated by pregnancy or its management, but excluding deaths from incidental or accidental causes". Thus, maternal health risk refers to the approximate risk level of a woman's health while pregnant or soon after birth. With our chosen model we aim to identify some key indicators that predict higher maternal health risk. In rural communities where it is costly and difficult to provide consistent medical care, having a method to predict 
 maternal health risk from minimally invasive methods could be greatly beneficial in improving health outcomes for mothers and babies alike.
 After some initial exploration of classification models we settled on the Decision Tree algorithm for its easily interpretable model and relatively high accuracy score. 
 Based on this Decision Tree model a key indicator of increased maternal health risk was blood sugar. The decision tree our model built based on the dataset suggests that blood sugar higher than 7.95 mmol/l
@@ -12,12 +12,12 @@ While this is a great first step the model accuracy is not accurate enough to be
 Additionally, it should be noted that since this dataset contains health data only from Pima Indians the model have may learned a bias specific to unknown genetic factors present in this sample. Thus, a much larger dataset with a diverse sample 
 should be used to train the model before it is utilized in any communities.
 
-The dataset used in this project was originally from the Pima Indians Diabetes Database. The dataset was sourced from the UCI Machine Learning Repository (Dua and Graff 2017) and can be found [here](https://archive.ics.uci.edu/dataset/863/maternal+health+risk), 
+The dataset used in this project was originally from the Pima Indians Diabetes Database (Pima Indians Diabetes Database, 2024). The dataset was sourced from the UCI Machine Learning Repository (Dua and Graff 2017) and can be found [here](https://archive.ics.uci.edu/dataset/863/maternal+health+risk), 
 or more specifically [this file](https://archive.ics.uci.edu/static/public/863/maternal+health+risk.zip).
-Classification for each observation in the dataset was done with help from Dr. Shirin Shabnam.
+Classification for each observation in the dataset was done with help from Dr. Shirin Shabnam (Ahmed, Kashem, Rahman, & Khatun, 2020).
 
 # Report
-A link to our report will be added here when it is finished in a few weeks!
+A link to our report can be found here.
 
 ## Dependencies
 - [Docker](https://www.docker.com/) 
@@ -99,8 +99,12 @@ The software code contained within this repository is licensed under the MIT lic
 
 # References
 
-Pima Indians Diabetes Database, https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names, 22 Nov 2024. 
+World Health Organization. (2024, December 7). Maternal health. World Health Organization. https://www.who.int/health-topics/maternal-health#tab=tab_1
 
-Dua, Dheeru, and Casey Graff. 2017. “UCI Machine Learning Repository.” University of California, Irvine, School of Information; Computer Sciences. http://archive.ics.uci.edu/ml.
+World Health Organization. (1992). International classification of diseases and related health problems. World Health Organization.
 
-Ahmed, M., Kashem, M.A., Rahman, M., and S. Khatun. 2020. “Review and Analysis of Risk Factor of Maternal Health in Remote Area Using the Internet of Things(IoT)” Published in Lecture Notes in Electrical Engineering, vol 632. https://doi.org/10.24432/C5DP5D.
+Pima Indians Diabetes Database. (2024, November 22). Pima Indians Diabetes Dataset. Retrieved from https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names
+
+Dua, D., & Graff, C. (2017). UCI machine learning repository. University of California, Irvine, School of Information and Computer Sciences. http://archive.ics.uci.edu/ml
+
+Ahmed, M., Kashem, M. A., Rahman, M., & Khatun, S. (2020). Review and analysis of risk factors of maternal health in remote areas using the Internet of Things (IoT). Lecture Notes in Electrical Engineering, 632, 1-10. https://doi.org/10.24432/C5DP5D
