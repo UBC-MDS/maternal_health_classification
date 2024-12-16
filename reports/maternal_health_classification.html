@@ -76,6 +76,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model Comparison</a></li>
   <li><a href="#reporting-test-score" id="toc-reporting-test-score" class="nav-link" data-scroll-target="#reporting-test-score">Reporting Test Score</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -404,35 +405,35 @@ Table&nbsp;4: Cross validation scores of models.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Dummy Classifier</td>
-<td style="text-align: left;">0.003 (+/- 0.001)</td>
 <td style="text-align: left;">0.002 (+/- 0.001)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.413 (+/- 0.006)</td>
 <td style="text-align: left;">0.413 (+/- 0.001)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Gaussian Bayes</td>
-<td style="text-align: left;">0.004 (+/- 0.001)</td>
+<td style="text-align: left;">0.003 (+/- 0.001)</td>
 <td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.598 (+/- 0.033)</td>
 <td style="text-align: left;">0.607 (+/- 0.004)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Decision Tree</td>
-<td style="text-align: left;">0.007 (+/- 0.006)</td>
-<td style="text-align: left;">0.002 (+/- 0.001)</td>
+<td style="text-align: left;">0.005 (+/- 0.004)</td>
+<td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.822 (+/- 0.048)</td>
 <td style="text-align: left;">0.930 (+/- 0.004)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">RBF SVM</td>
-<td style="text-align: left;">0.030 (+/- 0.005)</td>
-<td style="text-align: left;">0.005 (+/- 0.001)</td>
+<td style="text-align: left;">0.018 (+/- 0.003)</td>
+<td style="text-align: left;">0.003 (+/- 0.000)</td>
 <td style="text-align: left;">0.699 (+/- 0.060)</td>
 <td style="text-align: left;">0.718 (+/- 0.006)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Logistic Regression</td>
-<td style="text-align: left;">0.010 (+/- 0.006)</td>
+<td style="text-align: left;">0.007 (+/- 0.005)</td>
 <td style="text-align: left;">0.001 (+/- 0.000)</td>
 <td style="text-align: left;">0.611 (+/- 0.048)</td>
 <td style="text-align: left;">0.616 (+/- 0.009)</td>
@@ -469,6 +470,10 @@ Figure&nbsp;5: Decision Tree (Depth = 3)
 </figure>
 </div>
 <p>In order to answer our primary research question we have identified the first few leaves of our Decision Tree model (<a href="#fig-decision_tree" class="quarto-xref">Figure&nbsp;5</a>). Analyzing all levels of the tree is overwhelming and may not provide actionable insights. Focusing only on the top levels should provide us a rough understanding of the most impactful variables that our model has identified. Based on the first three levels of the decision tree, the root node of your tree splits on Blood Sugar (BS) with a threshold of 7.95. This indicates that BS is the most important variable in predicting the maternal health risk classification, as it is the first and most influential split in the tree. The next key split (on the left branch of the tree) is SystolicBP (Systolic Blood Pressure) with a threshold of 132.5, suggesting it is the second-most important variable. On the right subtree, the next key split is SystolicBP (Systolic Blood Pressure) with a threshold of 135.0, is also used to refine classifications, particularly for mid-risk predictions. Blood Sugar (BS) stands out as the key indicator for maternal health classification since it governs the initial split and directs subsequent branching based on its values.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The Decision Tree model performed fairly well, however given the intention of the data, which is to gather health data of pregnant women in rural communities and predict their health risk so a doctor can assess them in person, a much higher score is needed. Specifically, a model that minimizes false negatives to zero would be necessary since we wouldn’t want to have anyone falsely predicted as mid risk when they are high risk and need to see a doctor. Thus, we recommend a more diverse set of data be collected from the communities that would implement a project such as this. Additionally, more exploration of the best model types as well as feature engineering to give the best possible model performance should be done.</p>
 </section>
 </section>
 <section id="references" class="level1 unnumbered">
