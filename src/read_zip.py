@@ -17,6 +17,17 @@ def read_zip(url, directory):
     -------
     None
     """
+    
+    # Clear the directory before proceeding
+    for file_name in os.listdir(directory):
+        file_path = os.path.join(directory, file_name)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)  # Remove files
+            elif os.path.isdir(file_path):
+                os.rmdir(file_path)  # Remove empty directories
+        except Exception as e:
+            raise ValueError(f"Failed to clear the directory: {e}")
 
     if not os.path.isdir(directory):
         raise ValueError('The directory provided does not exist.')
@@ -46,6 +57,5 @@ def read_zip(url, directory):
     if not extracted_files:
         raise ValueError('The ZIP file is empty or contains no new files.')
 
-    os.remove(zip_path)
 
     print(f"Extraction successful! Extracted files: {extracted_files}")
