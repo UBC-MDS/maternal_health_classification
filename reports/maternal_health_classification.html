@@ -79,7 +79,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="../maternal_health_classification.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="maternal_health_classification.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -130,7 +130,7 @@ div.csl-indent {
 </section>
 <section id="analysis" class="level2">
 <h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
-<p>To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used <span class="citation" data-cites="Python">Van Rossum and Drake (<a href="#ref-Python" role="doc-biblioref">2009</a>)</span> for our analysis, more specifically we used the following packages: <span class="citation" data-cites="numpy">Harris et al. (<a href="#ref-numpy" role="doc-biblioref">2020</a>)</span>, <span class="citation" data-cites="altair">VanderPlas (<a href="#ref-altair" role="doc-biblioref">2018</a>)</span>, <span class="citation" data-cites="pandas">McKinney (<a href="#ref-pandas" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="matplotlib">Hunter (<a href="#ref-matplotlib" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="scikit-learn">Pedregosa et al. (<a href="#ref-scikit-learn" role="doc-biblioref">2011</a>)</span>. We drop two rows from our dataset which contain data that is out of normal range (a heart rate of 7 beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm <span class="citation" data-cites="heart_rates">(<a href="#ref-heart_rates" role="doc-biblioref">American Heart Association 2024</a>)</span>. Moreover, heart rate during pregnancy typically increases on average, for various reasons, though there is no clear upper limit defined to be normal <span class="citation" data-cites="pregnancy_tachycardia">(<a href="#ref-pregnancy_tachycardia" role="doc-biblioref">Coad and Frise 2021</a>)</span>. Our dataset has a number of rows that seem to be duplicated, however, after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there are only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally, we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.</p>
+<p>To answer our research question we explored several different machine learning models including: Gaussian Bayes, Logistic Regression, Decision Tree, and RBF-SVC, and compared the cross validation results to choose the best one. To accomplish this we used <span class="citation" data-cites="Python">Van Rossum and Drake (<a href="#ref-Python" role="doc-biblioref">2009</a>)</span> for our analysis, more specifically we used the following packages: Numpy <span class="citation" data-cites="numpy">(<a href="#ref-numpy" role="doc-biblioref">Harris et al. 2020</a>)</span>, Altair <span class="citation" data-cites="altair">(<a href="#ref-altair" role="doc-biblioref">VanderPlas 2018</a>)</span>, Pandas <span class="citation" data-cites="pandas">(<a href="#ref-pandas" role="doc-biblioref">McKinney 2010</a>)</span>, Matplotlib <span class="citation" data-cites="matplotlib">(<a href="#ref-matplotlib" role="doc-biblioref">Hunter 2007</a>)</span>, and Scikit-learn <span class="citation" data-cites="scikit-learn">(<a href="#ref-scikit-learn" role="doc-biblioref">Pedregosa et al. 2011</a>)</span>. We drop two rows from our dataset which contain data that is out of normal range (a heart rate of 7 beats per minute). This is clearly an error since humans on average have a heart rate between 60-100 bpm <span class="citation" data-cites="heart_rates">(<a href="#ref-heart_rates" role="doc-biblioref">American Heart Association 2024</a>)</span>. Moreover, heart rate during pregnancy typically increases on average, for various reasons, though there is no clear upper limit defined to be normal <span class="citation" data-cites="pregnancy_tachycardia">(<a href="#ref-pregnancy_tachycardia" role="doc-biblioref">Coad and Frise 2021</a>)</span>. Our dataset has a number of rows that seem to be duplicated, however, after some data exploration we have decided to keep these duplicated rows because we believe them to be from different people with the same data. Since there are only 5 columns with whole numbers and one column with an integer to only one decimal point we feel it is likely that multiple people had the same data. Additionally, we were able to check the csv file and see that the duplicate rows are far from each other rather than one after another, so we are postulating that they were indeed different individuals who happened to have the same age, blood pressure, body temperature, blood sugar, and risk level.</p>
 </section>
 </section>
 <section id="results-and-discussion" class="level1">
@@ -143,7 +143,7 @@ div.csl-indent {
 Table&nbsp;1: Description of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="8">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="2">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 13%">
@@ -252,7 +252,7 @@ Table&nbsp;1: Description of the maternal risk dataset.
 Table&nbsp;2: Information of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_info-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="9">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="3">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -312,7 +312,7 @@ Table&nbsp;2: Information of the maternal risk dataset.
 Table&nbsp;3: Shape of the maternal risk dataset.
 </figcaption>
 <div aria-describedby="tbl-df_shape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="10">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="4">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -383,7 +383,7 @@ Figure&nbsp;3: Boxplot of the Maternal Health Dataset
 Table&nbsp;4: Cross validation scores of models.
 </figcaption>
 <div aria-describedby="tbl-summary_cv_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="12">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="6">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 21%">
